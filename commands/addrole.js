@@ -3,7 +3,7 @@ const { prefix } = require('../config.json');
 // WIP
 module.exports = {
 	name: 'addrole',
-	description: 'Makes a role with provided color and name. (experimental)',
+	description: 'Makes a role with provided color and name. (experimental, needs rework)',
 	cooldown: 5,
 	aliases: ['add-role'],
 	guildOnly: [true],
@@ -15,7 +15,7 @@ module.exports = {
 		// removes user id from string
 		// const role = message.guild.roles.find(role => role.name === roleName);
 		const member = message.mentions.members.first();
-		console.log(`---Adding $[{role}] to $[]{userToAddRoleTo}, provided role was: ${roleName}`);
+		console.log(`MGMT: Adding $[{role}] to $[]{userToAddRoleTo}, provided role was: ${roleName}`);
 		if (message.member.hasPermission('MANAGE_ROLES') == true) {
 			// if (role == true) {
 			member.addrole(roleName).catch(console.error);

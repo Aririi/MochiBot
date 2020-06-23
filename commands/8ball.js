@@ -1,7 +1,7 @@
 // Does random number gen, then matches result to a phrase
 module.exports = {
 	name: '8ball',
-	description: 'Responds to a question.',
+	description: 'Responds to a question with a certain response.',
 	cooldown: 5,
 	aliases: ['magic-ball', 'fortune-teller', 'bowling-ball'],
 	usage: '[question]',

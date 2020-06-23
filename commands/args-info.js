@@ -3,6 +3,7 @@ module.exports = {
 	description: 'Information about the arguments provided.',
 	args: true,
 	usage: '[arg]',
+	aliases: ['argsinfo', 'argcheck,', 'arg-check'],
 	execute(message, args) {
 		// args is an array passed by index.js
 		if (args[0] === 'foo') {

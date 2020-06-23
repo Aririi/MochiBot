@@ -6,10 +6,9 @@ module.exports = {
 	description: 'Get the avatar URL of the mentioned user, or your own avatar if none are tagged.',
 	aliases: ['icon', 'pfp'],
 	execute(message) {
-		// console.log(message.author.displayAvatarURL());
 		// if none mentioned, provides authors avatar
 		if (!message.mentions.users.size) {
-			console.log(message.author.displayAvatarURL({ dynamic:true }));
+			// console.log(message.author.displayAvatarURL({ dynamic:true }));
 			return message.channel.send(new Discord.MessageEmbed()
 				.attachFiles(['../MochiBot.js/media/MochiBot-64.png'])
 				.setColor(userColor)
