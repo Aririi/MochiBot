@@ -1,6 +1,6 @@
 {
 	"prefix": "~",
-	"token": "TOKEN HERE",
+	"token": "[TOKEN HERE]",
 	"name": "MochiBot",
 	"infoColor": "#E7A84B",
 	"userColor": "#FEB047",
