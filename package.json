@@ -9,8 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "File": "^0.10.2",
     "discord.js": "^12.1.1",
     "eslint": "^6.8.0",
+    "node-base64-image": "^2.0.1",
+    "node-fetch": "^2.6.0",
+    "node-gif": "^1.0.5",
+    "node-png": "^0.4.3",
     "sodium": "^3.0.2"
   }
 }

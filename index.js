@@ -41,11 +41,11 @@ client.on('message', message => {
 
 	if (
 		message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart']) == false) {
-	// Random chance to change the status
+	// Random chance to change the status, unless the command is one of those blacklisted above
 		const randomNumber = (Math.floor(Math.random() * 20));
 		if (randomNumber >= 19) {
 			randomStatus();
-			console.log('The last message generated a value greater than 19, the status will now change.');
+			console.log('The last message generated a value greater than 19, so the status will now change.');
 		}
 
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -93,7 +93,7 @@ client.on('message', message => {
 		if (timestamps.has(message.author.id)) {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
-			if (now < expirationTime) {
+			if (now < expirationTime && message.author.id != owner) {
 				const timeLeft = (expirationTime - now) / 1000;
 				return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
 			}
@@ -134,16 +134,3 @@ function randomStatus() {
 
 // login to Discord with your app's token
 client.login(token);
-
-
-// to add:
-// music - yt, sc, spotify
-// podcasts
-// streaming
-// giveaway
-// rando meme + add meme
-// images - neko, giphy
-// counters - ++ - nae nae
-// quotes
-// haiku
-// tonk
