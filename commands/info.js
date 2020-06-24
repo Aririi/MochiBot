@@ -12,9 +12,9 @@ module.exports = {
 			const InfoEmbed = new Discord.MessageEmbed()
 				.setColor(`${infoColor}`)
 				.setTitle('MochiBot')
-				.attachFiles(['../MochiBot.js/media/MochiBot.png'])
+				.attachFiles(['./media/MochiBot.png'])
 				.setImage('attachment://MochiBot.png')
-				.setDescription('MochiBot was originally designed for Yee Yee University.\nContains emojis, quotes, reactions, points, gifs, images, and more.')
+				.setDescription('MochiBot was originally designed for Yee Yee University.\nContains emojis, quotes, reactions, points, gifs, images, and more.\nLargely inspired and derived from LanteaBot/MichiBot by Michiyo on OpenComputers.')
 				.addFields(
 					{ name: 'Development Start Date:', value: 'April 1st, 2020' },
 					{ name: 'Author:', value: 'Ariri#7998' },
@@ -24,7 +24,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 
-			message.channel.send(InfoEmbed);
+			message.channel.send(InfoEmbed).catch(error => console.log(error));
 
 		});
 	},
