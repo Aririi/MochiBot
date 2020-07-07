@@ -5,7 +5,7 @@ Requires Opus, Node 12, and Discord.js
 
 Todo:
 
-Rework commands using split rather than arg shifts.
+Rework commands using from splits to arg shifts as needed
 
 Add more REST functionality (memes, gifs, pictures, etc.)
 
