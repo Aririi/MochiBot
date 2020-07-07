@@ -12,10 +12,11 @@ module.exports = {
 		const messageToSay = message.content.slice(0, 2000).replace(regex, '');
 		console.log(message.author.tag, messageToSay);
 		if (messageToSay == '') {
-			return message.reply('say wha?');
+			return message.channel.send(`${message.member.nickname} say wha?`);
 		}
 		else {
 			// message.author.delete(1000).catch(console.log());
+			message.delete().catch(console.error);
 			message.channel.send(messageToSay);
 		}
 	},
