@@ -2,6 +2,9 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token, owner } = require('./config.json');
+const Datastore = require('nedb');
+const db = new Datastore({ filename: './databases/rep.db', autoload: true });
+// const { readyUserActivity } = require('./commands/randomstatus.js');
 
 // create a new Discord client
 const client = new Discord.Client();
@@ -40,17 +43,29 @@ client.on('message', message => {
 	console.log(`[${message.author.tag}: ${message.content}]`);
 
 	if (
-		message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart']) == false) {
+		message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart']) === false) {
 	// Random chance to change the status, unless the command is one of those blacklisted above
 		const randomNumber = (Math.floor(Math.random() * 20));
 		if (randomNumber >= 19) {
 			randomStatus();
 			console.log('The last message generated a value greater than 19, so the status will now change.');
 		}
+	}
 
-		if (!message.content.startsWith(prefix) || message.author.bot) return;
+	// if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-		// splits off prefix and makes following text into lowercase
+	// checks if contains bot's prefix and executes accordingly
+	if (!message.content.startsWith(prefix)) {
+
+		// checks if a user was mentioned (not a command) along with '++' for the rep system
+		if (message.content.endsWith('++') === true && message.channel.type == 'text' && message.mentions.users.first() != undefined) {
+			// console.log('Match successful, attempting to add rep. points.');
+			repFind(message);
+		}
+	}
+
+	else {
+	// splits off prefix and makes following text into lowercase
 		const args = message.content.slice(prefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
 
@@ -102,7 +117,6 @@ client.on('message', message => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
-
 		try {
 			command.execute(message, args, client);
 		}
@@ -131,6 +145,58 @@ function randomStatus() {
 		.catch(console.error);
 }
 
+function repFind(message) {
+	// adds a rep point to the user mentioned with ++ (Example: MochiBot++)
+	// console.log(`repFind: Given ID was ${message.mentions.users.first()}`);
+	const userToRepInfo = message.mentions.users.first();
+	const userToRepID = userToRepInfo.id;
+	if (message.author.id === userToRepID) {return message.channel.send(`${message.author.username}: You cannot give yourself points.`);}
+	// searches the db for the user mentioned
+	db.find({ _id: userToRepID }, function(err, docs) {
+		// error catch w/ initial find function
+		if (err != null) {
+			message.channel.send('There was an error trying to find that user in the database.');
+			console.log(`DB ERROR: Could not search successfully: ${err}`);
+		}
+		// if no matches, create an entry in the db
+		if (docs[0] === undefined) {
+			console.log('Failure to find a matching ID, creating a new entry...');
+			db.insert([{ _id: userToRepID, points: 0, name: userToRepInfo.username }], function(err) {
+				// error catch with entry attempt
+				if (err != null) {
+					message.channel.send('There was an error creating a new entry.');
+					console.log(`DB ERROR: Failed to make new entry. '${err}'`);
+				}
+				// if the new entry was successfully created, rerun the function so a point will be added
+				else {
+					// console.log('Entry created.');
+					repFind(message);
+				}
+			});
+		}
+		// if a match was found, add a point
+		else if (docs[0] != undefined) {
+			repAdd(message, docs, userToRepID, userToRepInfo);
+		}
+	});
+}
+
+function repAdd(message, docs, userToRepID, userToRepInfo) {
+	// adds one point to the existing for the first match (since its a uuid, only one should exist)
+	console.log(`repAdd: Adding one point to ${userToRepID}...`);
+	const newPoints = docs[0].points + 1;
+	db.update({ _id: userToRepID }, { _id: userToRepID, points: newPoints, name: userToRepInfo.username }, {}, function(err) {
+		// error catch if adding points fails
+		if (err != null) {
+			message.channel.send('There was an error adding a point to the user.');
+			console.log(`DB ERROR: Failed to update existing entry. '${err}'`);
+		}
+		else {
+			// console.log('Point successfully added.');
+			return message.channel.send(`<@${userToRepID}> now has ${newPoints} point(s).`);
+		}
+	});
+}
 
 // login to Discord with your app's token
 client.login(token);
