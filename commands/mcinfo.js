@@ -13,7 +13,8 @@ module.exports = {
 			const mcstatus = await fetch(`https://api.mcsrvstat.us/2/${server}`)
 				.then(response => response.json())
 				.catch(error => console.log(error));
-				//  if not online, status is uknown, therefore invalid or irretrievable, so exit.
+
+			//  if not online, status is unknown, therefore invalid or irretrievable, so exit.
 			if (mcstatus.online != true) {
 				return message.reply(`could not get the status of \`${server}\``);
 			}
@@ -34,7 +35,8 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`,
 					`${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
-			message.channel.send(serverStatus);
+
+			message.channel.send(serverStatus).then(sentMessage => sentMessage.delete({ timeout: 20000 }));
 		}
 		// timeout message while data is fetched
 		if (args[0] !== undefined) {

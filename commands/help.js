@@ -13,32 +13,23 @@ module.exports = {
 		const HelpEmbed = new Discord.MessageEmbed()
 			.setColor(helpColor)
 			.setTitle('MochiBot\'s Commands:')
-			.attachFiles(['../MochiBot.js/media/MochiBot-64.png'])
-			.setThumbnail('attachment://MochiBot-64.png')
+			.attachFiles(['./media/MochiBot-64.png'])
+			// .setThumbnail('attachment://MochiBot-64.png')
 			.addFields(
 				{ name: 'Command List:', value: `\`${commands.map(command => command.name).join(', ')}\`` },
 				{ name: 'How to get more information:', value: `\nYou can send \`${prefix}help [command name]\` to get info on a specific command.` },
-				{ name: 'MochiBot\'s prefix in this server:', value: `\`${prefix}\`` },
+				{ name: 'MochiBot\'s prefix:', value: `\`${prefix}\`` },
 			)
-			.setAuthor('MochiBot Matrix', 'attachment://MochiBot-64.png', 'https://github.com/[placeholderURL]')
+			.setAuthor('MochiBot Matrix', 'attachment://MochiBot-64.png', 'https://github.com/Aririi/MochiBot')
 			.setTimestamp()
 			.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 		// checks if command was from dm and provides differently formatted reply
 		if (!args.length) {
 			if (message.channel.type === 'dm') {
-				// message.reply(`${message.author.username}, here's a list of all my commands:`);
-				// message.channel.send(`\`${commands.map(command => command.name).join(', ')}\``);
-				// message.channel.send(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command.`);
-				//
-				// return message.author.send(data, { split: true });
 				return message.author.send(HelpEmbed);
 			}
 			else {
-				// message.reply('here\'s a list of all my commands:');
-				// message.channel.send(`\`${commands.map(command => command.name).join(', ')}\``);
-				// message.channel.send(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command.`);
 				return message.channel.send(HelpEmbed);
-				// return message.author.send(data, { split: true });
 			}
 		}
 

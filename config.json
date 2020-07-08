@@ -1,11 +1,12 @@
 {
 	"prefix": "~",
-	"token": "[TOKEN HERE]",
+	"token": "Njk1MDIxNDc4NDkxNzE3Njc3.XvLQyg.0_MEHLBKFKN4sNlbF9-OevHI_Kw",
 	"name": "MochiBot",
 	"infoColor": "#E7A84B",
 	"userColor": "#FEB047",
 	"serverColor": "#FEB047",
 	"mcColor": "#FEB047",
 	"helpColor:": "#FEB047",
+	"randomColor": "#FEB047",
 	"owner": 335186179521642498
 }

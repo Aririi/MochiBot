@@ -52,7 +52,18 @@ client.on('message', message => {
 		}
 	}
 
-	// if (!message.content.startsWith(prefix) || message.author.bot) return;
+	// TO DO add help function when mentioned and asked 'help'
+	// if (message.content.includes('<@!695021478491717677> help')) {
+	// 	try {
+	// 		const command = 'help.js';
+	// 		command.execute(message);
+	// 	}
+	// 	catch (error) {
+	// 		console.error(error);
+	// 		message.reply('there was an error trying to execute that command.');
+	// 		message.channel.send(error).catch(console.error);
+	// 	}
+	// }
 
 	// checks if contains bot's prefix and executes accordingly
 	if (!message.content.startsWith(prefix)) {

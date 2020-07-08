@@ -90,9 +90,9 @@ module.exports = {
 			message.channel.send(`I don't know how to get "${args[0]}," maybe recommend it to the developer?`);
 		}
 
-		function sendEmbed(randomColor, name, description, result) {
+		function sendEmbed(description, result) {
 			const randomMediaEmbed = new Discord.MessageEmbed(randomColor, name, description, result)
-				.setColor(randomColor)
+				.setColor(`${randomColor}`)
 				.setTitle(`${name}'s Image Database`)
 				.setDescription(description)
 				// .attachFiles(['../MochiBot/media/MochiBot-64.png'])

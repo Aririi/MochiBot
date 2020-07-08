@@ -11,7 +11,7 @@ module.exports = {
 			sentMessage.delete({ timeout: 2000 });
 			const InfoEmbed = new Discord.MessageEmbed()
 				.setColor(`${infoColor}`)
-				.setTitle('MochiBot')
+				.setTitle('About MochiBot')
 				.attachFiles(['./media/MochiBot.png'])
 				.setImage('attachment://MochiBot.png')
 				.setDescription('MochiBot was originally designed for Yee Yee University.\nContains emojis, quotes, reactions, points, gifs, images, and more.\nLargely inspired and derived from LanteaBot/MichiBot by Michiyo on OpenComputers.')

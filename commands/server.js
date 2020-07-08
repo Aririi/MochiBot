@@ -7,11 +7,11 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['server-info'],
 	execute(message) {
-		console.log(message.guild.icon);
+		// console.log(message.guild.icon);
 		const ServerInfo = new Discord.MessageEmbed()
 			.setColor(serverColor)
 			.setTitle(`${message.guild.name}`)
-			.attachFiles(['../MochiBot.js/media/MochiBot-64.png'])
+			.attachFiles(['./media/MochiBot-64.png'])
 			.setThumbnail(`https://cdn.discordapp.com/icons/${message.guild.icon}.png?size=128`)
 			// .setDescription('MochiBot was origally designed for Yeeyee University.\nContains emojis, quotes, reactions, points, gifs, images, and more.')
 			.addFields(
