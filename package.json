@@ -1,17 +1,19 @@
 {
   "name": "mochibot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord.js chat bot.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Aririi",
   "license": "ISC",
   "dependencies": {
     "File": "^0.10.2",
     "discord.js": "^12.1.1",
     "eslint": "^6.8.0",
+    "nedb": "^1.8.0",
+    "nekos.life": "^2.0.7",
     "node-base64-image": "^2.0.1",
     "node-fetch": "^2.6.0",
     "node-gif": "^1.0.5",
