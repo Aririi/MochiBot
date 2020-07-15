@@ -10,7 +10,8 @@ module.exports = {
 	devOnly: true/false,
 	execute(message) {
 
-  };
+  }
+};
 
 // send message -- message.channel.send()
 

@@ -12,5 +12,14 @@ module.exports = {
 			message.channel.send('Compaction of rep.db attempted.');
 			console.log(`DB ACTION: ${message.author.id} compacted rep.db`);
 		}
+		else if (args[0] === 'reminders') {
+			const repDB = new Datastore({ filename: './databases/reminders.db', autoload: true });
+			repDB.persistence.compactDatafile();
+			message.channel.send('Compaction of reminders.db attempted.');
+			console.log(`DB ACTION: ${message.author.id} compacted reminders.db`);
+		}
+		else {
+			return message.channel.send('Couldn\'t find that database...');
+		}
 	},
 };
