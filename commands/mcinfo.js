@@ -15,10 +15,7 @@ module.exports = {
 				.catch(error => console.log(error));
 
 			//  if not online, status is unknown, therefore invalid or irretrievable, so exit.
-			if (mcstatus.online != true) {
-				return message.reply(`could not get the status of \`${server}\``);
-			}
-
+			if (mcstatus.online != true) {return message.channel.send(`Could not get the status of \`${server}\``);}
 			// otherwise, send an embed containing the fetched data.
 			const serverStatus = new Discord.MessageEmbed(server, embedColor)
 				.setColor(embedColor)
@@ -36,19 +33,17 @@ module.exports = {
 				.setFooter(`Requested by ${message.author.username}`,
 					`${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 
-			message.channel.send(serverStatus).then(sentMessage => sentMessage.delete({ timeout: 20000 }));
-		}
-		// timeout message while data is fetched
-		if (args[0] !== undefined) {
-			message.channel.send('Compiling matrices. Stand by...').then(sentMessage => {
-				sentMessage.delete({ timeout: 1000 });
-			});
-			// runs the async function
-			mcInfo(args[0], mcColor);
-		}
-		else {
-			message.reply('you must provide a server address in order to check its status.');
+			message.channel.send(serverStatus).then(sentMessage => sentMessage.delete({ timeout: 60000 }));
 		}
 
+		// timeout message while data is fetched
+		if (args[0] != undefined) {
+			message.channel.send('Compiling matrices. Stand by...').then(sentMessage => {
+				sentMessage.delete({ timeout: 1000 });
+				mcInfo(args[0], mcColor);
+			});
+
+		}
+		else {return message.channel.send(`${message.author.username}: You must provide a server address in order to check its status.`);}
 	},
 };

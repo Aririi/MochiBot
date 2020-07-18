@@ -6,9 +6,10 @@ module.exports = {
 	description: 'Displays user information of author or mentioned user.',
 	aliases: ['user-info'],
 	execute(message) {
+		// TO DO: Compress this.. a lot.
 		if (!message.mentions.users.size) {
 			if (message.channel.type === 'dm') {
-				return message.channel.send(new Discord.MessageEmbed()
+				message.channel.send(new Discord.MessageEmbed()
 					.attachFiles(['./media/MochiBot-64.png'])
 					.setColor(`${userColor}`)
 					.setTitle(`${message.author.tag}`)
@@ -25,7 +26,7 @@ module.exports = {
 				);
 			}
 			else {
-				return message.channel.send(new Discord.MessageEmbed()
+				message.channel.send(new Discord.MessageEmbed()
 					.attachFiles(['./media/MochiBot-64.png'])
 					.setColor(`${userColor}`)
 					.setTitle(`${message.member.nickname} (${message.author.tag})`)
@@ -44,7 +45,6 @@ module.exports = {
 				);
 			}
 		}
-
 
 		const userInfo = message.mentions.users.map(user => {
 			if (message.channel.type === 'dm') {
@@ -86,6 +86,5 @@ module.exports = {
 		},
 		);
 		message.channel.send(userInfo);
-
 	},
 };

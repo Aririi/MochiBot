@@ -9,14 +9,9 @@ module.exports = {
 			if (message.channel.type === 'dm') {
 				return message.channel.send('Lol indeed.');
 			}
-			else {
-				return message.channel.send(`${message.author.username}: Lol indeed.`);
-			}
+			else {return message.channel.send(`${message.author.username}: Lol indeed.`);}
 		}
-
-		const haha = message.mentions.users.map(user => {
-			return `That's funny, <@${user.id}>.`;
-		});
+		const haha = message.mentions.users.map(user => {return `That's funny, <@${user.id}>.`;});
 
 		message.channel.send(haha);
 	},

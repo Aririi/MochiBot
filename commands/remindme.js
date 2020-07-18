@@ -1,12 +1,10 @@
-const Datastore = require('nedb');
-const timeDB = new Datastore({ filename: './databases/reminders.db', autoload: true });
-
 module.exports = {
 	name: 'remindme',
 	description: 'Reminds you you with a message, given a certain time after sending it.',
 	aliases: ['reminder', 'setreminder', 'set-reminder'],
 	usage: '[time (ddhhmm)] [what to be reminded of]',
-	execute(message, args, client) {
+	args: true,
+	execute(message, args, client, timeDB) {
 		// gets current time to compare for later
 		let timeNow = Date.now();
 		const timeRegex = /d|h|m/g;

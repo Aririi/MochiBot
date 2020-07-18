@@ -3,10 +3,8 @@ module.exports = {
 	description: 'Kicks the mentioned user.',
 	guildOnly: true,
 	usage: '[mentioned user]',
+	args: true,
 	execute(message, args) {
-		if (!message.mentions.users.size) {
-			return message.reply('you need to tag a user in order to kick them!');
-		}
 		const taggedUser = message.mentions.users.first();
 		console.log(`${message.author} wanted to kick ${taggedUser}`);
 

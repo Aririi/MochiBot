@@ -4,6 +4,7 @@ module.exports = {
 	aliases: ['condense'],
 	usage: '[db name]',
 	devOnly: true,
+	args: true,
 	execute(message, args) {
 		const Datastore = require('nedb');
 		if (args[0] === 'rep') {

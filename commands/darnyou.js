@@ -4,13 +4,11 @@ module.exports = {
 	name: 'darnyou',
 	description: 'Heckin bot.',
 	cooldown: 5,
-	aliases: ['darn-you', 'heck-you'],
+	aliases: ['heckyou', 'kys'],
 	execute(message) {
 		if (message.author.id == owner) {
 			message.channel.send('I\'m sorry to have disappointed you, creator...');
 		}
-		else {
-			message.channel.send('Sorry to disappoint. (っ- ‸ – ς)');
-		}
+		else {message.channel.send('Sorry to disappoint. (っ- ‸ – ς)');}
 	},
 };

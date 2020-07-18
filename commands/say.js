@@ -1,21 +1,16 @@
-const { prefix } = require('../config.json');
-
 module.exports = {
 	name: 'say',
 	description: 'Echoes the provided message.',
 	cooldown: 10,
 	aliases: ['echo', 'print'],
 	usage: ['message'],
-	execute(message) {
-		// removes the prefix and command from the message
-		const regex = new RegExp(`^${prefix}say|${prefix}print|${prefix}echo`, 'gi');
-		const messageToSay = message.content.slice(0, 2000).replace(regex, '');
-		console.log(message.author.tag, messageToSay);
-		if (messageToSay == '') {
-			return message.channel.send(`${message.member.nickname} say wha?`);
-		}
+	args: true,
+	execute(message, args) {
+		if (args[0] === undefined) {return message.channel.send(`${message.member.username}: Say wha?`);}
 		else {
-			// message.author.delete(1000).catch(console.log());
+			let messageToSay = args.join(' ');
+			messageToSay = messageToSay.slice(0, 2000);
+			console.log(`SAY: ${message.author.tag} ${messageToSay}`);
 			message.delete().catch(console.error);
 			message.channel.send(messageToSay);
 		}

@@ -6,9 +6,9 @@ module.exports = {
 	description: 'Shows bot info.',
 	aliases: ['information', 'about', 'mochibot', 'bot'],
 	execute(message) {
-		// sends temp message while embed sends and deletes temp message
+		// sends temp message while embed sends
 		message.channel.send('Compiling matrices. Stand by...').then(sentMessage => {
-			sentMessage.delete({ timeout: 2000 });
+			sentMessage.delete({ timeout: 1000 });
 			const InfoEmbed = new Discord.MessageEmbed()
 				.setColor(`${infoColor}`)
 				.setTitle('About MochiBot')
@@ -24,7 +24,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 
-			message.channel.send(InfoEmbed).catch(error => console.log(error));
+			message.channel.send(InfoEmbed);
 
 		});
 	},

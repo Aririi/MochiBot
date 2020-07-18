@@ -8,6 +8,7 @@ module.exports = {
 	aliases: ['add-role'],
 	guildOnly: [true],
 	usage: '[mentioned user] [role]',
+	args: true,
 	execute(message) {
 		const regex = new RegExp(`^${prefix}addrole|${prefix}add-role`, 'gi');
 		let roleName = message.content.replace(regex, '');

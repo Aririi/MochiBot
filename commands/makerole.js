@@ -3,35 +3,26 @@ module.exports = {
 	name: 'makerole',
 	description: 'Makes a role with provided color and name.',
 	cooldown: 5,
-	aliases: ['make-role'],
-	guildOnly: [true],
+	aliases: ['createrole'],
+	guildOnly: true,
 	usage: '[#hexColor] [name-phrase]',
+	args: true,
 	execute(message, args) {
-		const regex = new RegExp(`^${prefix}makerole|${prefix}make-role`, 'gi');
-		let roleName = message.content.replace(regex, '');
-		roleName = roleName.slice(9, 50);
-		const roleColor = args[0];
-		console.log(`Making role with ${roleColor}; ${roleName};}`);
-
+		const roleColor = args[0].replace('#', '');
+		let roleName = args.shift();
+		roleName = args.join(' ');
+		if (args[1] === undefined) {return message.channel.send(`${message.author.username}: You did not provide a name for the role. (Use \`${prefix}help makerole\` for more information.)`);}
+		console.log(`MGMT: Attmepting to make role with color '${roleColor}' and name '${roleName}'`);
+		// checks for valid permissions
 		if (message.member.hasPermission('MANAGE_ROLES') == true) {
-			if (roleName == '') {
-				return message.reply(`you did not give the needed arguments. (Use \`${prefix}help makerole\` for more information.)`);
-			}
-			if (roleColor == undefined) {
-				return message.reply(`you did not give the needed arguments. (Use \`${prefix}help makerole\` for more information.)`);
-			}
-			else {
-				message.guild.roles.create({ data: { name: roleName, permissions: [], color: roleColor,
-					hoist: true, mentionable: false } }).catch(console.error);
-				//   .then(error => {
-				// 	message.reply(`there was an error: ${error}`);
-				// },
-				// );
-			}
+			message.guild.roles.create({ data: { name: roleName, permissions: [], color: roleColor,
+				hoist: true, mentionable: false } })
+				.then(function() {message.channel.send(`${message.author.username}: Successfully made role with color ${roleColor} and name "${roleName}"`);})
+				.catch(function() {
+					message.channel.send('There was an error trying to make a role. (Try checking permissions.');
+					console.error;
+				});
 		}
-		else {
-			return message.reply('you need the \'Manage Roles\' permission for this command.');
-		}
-		message.reply(`Made role with color ${roleColor} and name "${roleName}"`);
+		else {return message.reply('you need the \'Manage Roles\' permission for this command.');}
 	},
 };

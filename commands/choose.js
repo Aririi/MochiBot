@@ -1,34 +1,29 @@
 module.exports = {
 	name: 'choose',
-	description: 'Chooses between two choices using RNG.',
+	description: 'Chooses between choices using RNG.',
 	aliases: ['pick'],
-	usage: '[option one] or [option two]',
+	usage: '[option one] or [option two] (more choices optional)',
+	args: true,
 	execute(message, args) {
-		// splits the message into two phrases where the word 'or' exists
+		// splits the message into two phrases where 'or' exists
 		const joinedArgs = args.join();
-		const regex = new RegExp(',', 'gi');
-		const formattedArgs1 = joinedArgs.replace(regex, ' ');
+		const formattedArgs1 = joinedArgs.replace(/[,]/gi, ' ');
 		const formattedArgs2 = formattedArgs1.replace('?', '');
-		const choice = formattedArgs2.split(' or ', 2);
+		const choices = formattedArgs2.split(' or ');
 		// console.log(choices);
 		// picks a random number to select from the array of two choices
-		const choiceNumber = Math.floor(Math.random() * 2);
-		// console.log(choiceNumber);
-		const chosen = choice[choiceNumber];
-		console.log(`Chose "${chosen}"`);
-		// selects the other choice and stores it for the sentence structures that will use it (further below)
-		let otherChoiceNumber = null;
-		if (choiceNumber === 1) {
-			otherChoiceNumber = 0;
-		}
-		else if (choiceNumber === 0) {
-			otherChoiceNumber = 1;
-		}
-		const otherChoice = choice[otherChoiceNumber];
-		console.log(otherChoice);
+		const choiceNumber = Math.floor(Math.random() * choices.length);
+		// console.log(choicesNumber);
+		const chosen = choices[choiceNumber];
+		// console.log(`Chose "${chosen}"`);
+		// selects another choice and stores it for the sentence structures that will use it (further below)
+		let otherChoiceNumber = Math.floor(Math.random() * choices.length);
+		while (otherChoiceNumber === choiceNumber) {otherChoiceNumber = Math.floor(Math.random() * choices.length);}
+		const otherChoice = choices[otherChoiceNumber];
+		// console.log(otherChoice);
 
 		// an array of possible sentence replies
-		const choicePhrases = [
+		const choiceResponses = [
 			'Why would you do that when you could do something else instead?',
 			`"${chosen}" doesn't really seem like a good idea right now.`,
 			'No, maybe tomorrow.',
@@ -80,9 +75,9 @@ module.exports = {
 		];
 
 		// picks from one of the above phrases using more RNG
-		const chosenPhraseNumber = Math.floor(Math.random() * 47);
-		const chosenPhrase = choicePhrases[chosenPhraseNumber];
-		console.log(chosenPhrase);
+		const chosenPhraseNumber = Math.floor(Math.random() * choiceResponses.length);
+		const chosenPhrase = choiceResponses[chosenPhraseNumber];
+		// console.log(chosenPhrase);
 
 		message.channel.send(`${message.author.username}: ${chosenPhrase}`);
 	},

@@ -6,6 +6,7 @@ module.exports = {
 	name: 'random',
 	description: 'Uses a few APIs to get random media of the argument given (see usage list). Limited to 8 loops per command.',
 	usage: '[avatar/icon/pfp, cat/meow, dog/woof, foxgirl, goose, gecg, kemonomimi, neko/nyan, nekogif/nyangif, waifu] [#(opt)]',
+	args: true,
 	execute(message, args) {
 		// required to init nekos.life wrapper
 		const nekoLifeClient = require('nekos.life');
@@ -99,9 +100,7 @@ module.exports = {
 			else if (args[0] === 'nekogif' || args[0] === 'nyangif') {randomNekoGIF();}
 			else if (args[0] === 'waifu') {randomWaifu();}
 			else if (args[0] === 'wallpaper') {randomWallpaper();}
-			else {
-				message.channel.send(`I don't know how to get "${args[0]}," maybe recommend it to the developer?`);
-			}
+			else {message.channel.send(`I don't know how to get "${args[0]}," maybe recommend it to the developer?`);}
 		}
 		function sendEmbed(description, result) {
 			const randomMediaEmbed = new Discord.MessageEmbed(randomColor, name, description, result)
@@ -113,9 +112,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`,
 					`${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
-
 			message.channel.send(randomMediaEmbed);
-
 		}
 	},
 };
