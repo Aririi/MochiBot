@@ -3,11 +3,10 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token, owner } = require('./config.json');
 const Datastore = require('nedb');
-const db = new Datastore({ filename: './databases/rep.db', autoload: true });
-// const { readyUserActivity } = require('./commands/randomstatus.js');
-
-// create a new Discord client
+const repDB = new Datastore({ filename: './databases/rep.db', autoload: true });
+const timeDB = new Datastore({ filename: './databases/reminders.db', autoload: true });
 const client = new Discord.Client();
+// TO DO library/file for possible statuses — const { readyUserActivity } = require('./commands/randomstatus.js');
 
 const cooldowns = new Discord.Collection();
 client.commands = new Discord.Collection();
@@ -22,34 +21,27 @@ for (const file of commandFiles) {
 }
 
 // when the client is ready, run this code
-// this event will only trigger one time after logging in
 client.once('ready', () => {
-	console.log(`User Tag: ${client.user.tag}`);
-	console.log(`User ID: ${client.user.id}`);
-	console.log(`${client.user.username} is ready for action! :3`);
-	randomStatus();
-	client.on('shardError', error => {
-		console.error('A websocket connection encountered an error:', error);
-	});
-
-	process.on('unhandledRejection', error => {
-		console.error('Unhandled promise rejection:', error);
-	});
+	console.log(`User Tag: ${client.user.tag}\nUser ID: ${client.user.id}\n${client.user.username} is ready for action! :3`);
+	randomStatus(); reminderCheck();
 });
 
+// initial launch and connection issue handles
+client.on('shardError', error => {
+	console.error('A websocket connection encountered an error:', error);
+});
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
+});
 
 // begin command section
 client.on('message', message => {
 	console.log(`[${message.author.tag}: ${message.content}]`);
 
-	if (
-		message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart']) === false) {
-	// Random chance to change the status, unless the command is one of those blacklisted above
+	if (!message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart'])) {
+	// random chance to change the status, unless the command is one of those blacklisted above
 		const randomNumber = (Math.floor(Math.random() * 20));
-		if (randomNumber >= 19) {
-			randomStatus();
-			console.log('The last message generated a value greater than 19, so the status will now change.');
-		}
+		if (randomNumber >= 19) {randomStatus();}
 	}
 
 	// TO DO add help function when mentioned and asked 'help'
@@ -67,11 +59,11 @@ client.on('message', message => {
 
 	// checks if contains bot's prefix and executes accordingly
 	if (!message.content.startsWith(prefix)) {
-
 		// checks if a user was mentioned (not a command) along with '++' for the rep system
-		if (message.content.endsWith('++') === true && message.channel.type == 'text' && message.mentions.users.first() != undefined) {
-			// console.log('Match successful, attempting to add rep. points.');
-			repFind(message);
+		if (message.content.endsWith('++') === true && message.channel.type == 'text') {
+			// determines if someone was @ or guess is needed
+			if (message.mentions.users.first() != undefined) {repFind(message, message.mentions.users.first());}
+			else {findUser(message);}
 		}
 	}
 
@@ -89,7 +81,7 @@ client.on('message', message => {
 
 		// checks if command is server-only via command property
 		if (command.guildOnly && message.channel.type !== 'text') {
-			return message.reply('I can\'t execute that command inside DMs.');
+			return message.reply('Sorry, that\'s a server only command.');
 		}
 		// checks if command is locked to dev use
 		if (message.author.id != owner && command.devOnly == true) {
@@ -98,27 +90,21 @@ client.on('message', message => {
 
 		// looks for arguments if needed
 		if (command.args && !args.length) {
-			let reply = `You didn't provide any arguments, ${message.author}.`;
-
+			let reply = `${message.author.username}: You didn't provide any arguments.`;
 			// provides proper usage
-			if (command.usage) {
-				reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-			}
-
+			if (command.usage) {reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;}
 			return message.channel.send(reply);
 		}
 
+		// cooldown timer for command usage (anti-spam)
 		if (!cooldowns.has(command.name)) {
 			cooldowns.set(command.name, new Discord.Collection());
 		}
-
 		const now = Date.now();
 		const timestamps = cooldowns.get(command.name);
 		const cooldownAmount = (command.cooldown || 3) * 1000;
-
 		if (timestamps.has(message.author.id)) {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
 			if (now < expirationTime && message.author.id != owner) {
 				const timeLeft = (expirationTime - now) / 1000;
 				return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
@@ -128,12 +114,10 @@ client.on('message', message => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
-		try {
-			command.execute(message, args, client);
-		}
+		try {command.execute(message, args, client, timeDB);}
 		catch (error) {
 			console.error(error);
-			message.reply('there was an error trying to execute that command.');
+			message.channel.send('There was an error trying to execute that command.');
 			message.channel.send(error).catch(console.error);
 		}
 	}
@@ -156,58 +140,107 @@ function randomStatus() {
 		.catch(console.error);
 }
 
-function repFind(message) {
-	// adds a rep point to the user mentioned with ++ (Example: MochiBot++)
+
+// matches text to a member in the guild, if applicable (so @ becomes optional)
+function findUser(message) {
+	let firstWord = message.content.split(' ', 1);
+	firstWord = firstWord[0].replace('++', '');
+	const userRegex = new RegExp(`(${firstWord})`, 'g');
+	let matchFound = false;
+	// fetches all members and checks each if there's a match
+	message.guild.members.fetch()
+		.then(members => {
+			members.forEach(member => {
+				// will not look for a match if one was already found, that way searches are in order as looped
+				if (!matchFound) {
+				// checks if user data array has nickname to avoid errors
+					if (member.nickname != null) {
+						if (member.user.username.match(userRegex)) {
+							matchFound = true; return repFind(message, member.user);
+						}
+						else if (member.nickname.match(userRegex)) {
+							matchFound = true; return repFind(message, member.user, member.nickname);
+						}
+					}
+					else if (member.user.username.match(userRegex)) {
+						matchFound = true; return repFind(message, member.user);
+					}
+				}
+			});
+		},
+		)
+		.catch(error => console.log(error));
+}
+
+// finds and adds reputation in the database when conditions met
+function repFind(message, user, nickname) {
+	let name;
+	if (nickname != undefined) {name = nickname;}
+	else {name = user.username;}
 	// console.log(`repFind: Given ID was ${message.mentions.users.first()}`);
-	const userToRepInfo = message.mentions.users.first();
-	const userToRepID = userToRepInfo.id;
-	if (message.author.id === userToRepID) {return message.channel.send(`${message.author.username}: You cannot give yourself points.`);}
+	const userToRepInfo = user;
+	if (message.author.id === userToRepInfo.id) {return message.channel.send(`${name}: You cannot give yourself points.`);}
 	// searches the db for the user mentioned
-	db.find({ _id: userToRepID }, function(err, docs) {
+	repDB.find({ _id: userToRepInfo.id }, function(err, docs) {
 		// error catch w/ initial find function
-		if (err != null) {
-			message.channel.send('There was an error trying to find that user in the database.');
-			console.log(`DB ERROR: Could not search successfully: ${err}`);
-		}
+		if (err != null) {console.log(`DB ERROR: Could not search successfully: ${err}`);}
 		// if no matches, create an entry in the db
 		if (docs[0] === undefined) {
 			console.log('Failure to find a matching ID, creating a new entry...');
-			db.insert([{ _id: userToRepID, points: 0, name: userToRepInfo.username }], function(err) {
+			repDB.insert([{ _id: userToRepInfo.id, points: 0, name: userToRepInfo.username }], function(err) {
 				// error catch with entry attempt
-				if (err != null) {
-					message.channel.send('There was an error creating a new entry.');
-					console.log(`DB ERROR: Failed to make new entry. '${err}'`);
-				}
+				if (err != null) {console.log(`DB ERROR: Failed to make new entry. '${err}'`);}
 				// if the new entry was successfully created, rerun the function so a point will be added
-				else {
-					// console.log('Entry created.');
-					repFind(message);
-				}
+				else {repFind(message, user, nickname);}
 			});
 		}
 		// if a match was found, add a point
-		else if (docs[0] != undefined) {
-			repAdd(message, docs, userToRepID, userToRepInfo);
-		}
+		else if (docs[0] != undefined) {repAdd(message, docs, userToRepInfo, name);}
 	});
 }
 
-function repAdd(message, docs, userToRepID, userToRepInfo) {
+function repAdd(message, docs, userToRepInfo, name) {
 	// adds one point to the existing for the first match (since its a uuid, only one should exist)
-	console.log(`repAdd: Adding one point to ${userToRepID}...`);
+	// console.log(`repAdd: Adding one point to ${userToRepInfo.id}...`);
 	const newPoints = docs[0].points + 1;
-	db.update({ _id: userToRepID }, { _id: userToRepID, points: newPoints, name: userToRepInfo.username }, {}, function(err) {
+	repDB.update({ _id: userToRepInfo.id }, { _id: userToRepInfo.id, points: newPoints, name: userToRepInfo.username }, {}, function(err) {
 		// error catch if adding points fails
 		if (err != null) {
 			message.channel.send('There was an error adding a point to the user.');
 			console.log(`DB ERROR: Failed to update existing entry. '${err}'`);
 		}
-		else {
-			// console.log('Point successfully added.');
-			return message.channel.send(`<@${userToRepID}> now has ${newPoints} point(s).`);
-		}
+		else {return message.channel.send(`${name} now has ${newPoints} point(s).`);}
 	});
 }
+
+// reminder functions to recover any that were sent after process exit, then waiting for them to timeout before sending it
+async function reminderCheck() {
+	const timeNow = Date.now();
+	timeDB.find({ time: { $gte: timeNow - 2 } }, function(err, docs) {
+		// error catch
+		if (err != null) {return console.log(`DB ERROR: Failed to search for reminders on launch. '${err}'`);}
+		// repeats the function for each match found, setting a timer
+		if (docs[0] != undefined) {
+			docs.forEach(function(entry) {
+				const reminderTimeout = entry.time - timeNow;
+				let remindDate = new Date(entry.time);
+				remindDate = remindDate.toUTCString();
+				console.log(`A reminder for ${remindDate} was scheduled, recovered from a previous instance.`);
+				setTimeout(function() {
+					const reminderToSend = `<@!${entry.userID}>: Reminder – ${entry.text}`;
+					const channel = client.channels.cache.get(entry.channelID);
+					channel.send(reminderToSend);
+					// removes the reminder from the database, so a match isn't found again
+					timeDB.remove({ _id: entry._id }, {}, function(err) {
+						if (err != null) {console.log(`DB ERROR: Failed to remove sent reminder. '${err}'`);}
+					});
+				}, reminderTimeout);
+			});
+		}
+		else {console.log('No reminders were scheduled.');}
+	});
+}
+
 
 // login to Discord with your app's token
 client.login(token);
