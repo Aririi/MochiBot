@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const { userColor } = require('../config.json');
-let title;
 
 function findUser(message, args, sendAvatar) {
 	const userRegex = new RegExp(`(${args.join(' ')})`, 'g');
@@ -29,8 +28,10 @@ module.exports = {
 	name: 'avatar',
 	description: 'Get the avatar URL of the mentioned user, or your own avatar if none are tagged.',
 	aliases: ['icon', 'pfp'],
-	usage: '[username/nickname]',
+	usage: '[mention/username/nickname]',
 	execute(message, args, client) {
+		let title;
+
 		if (args[0] != undefined) {
 			const userID = args[0].match(/^<@!?(\d+)>$/);
 			// if DM, searching not possible

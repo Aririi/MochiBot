@@ -12,13 +12,13 @@ module.exports = {
 		async function mcInfo(server, embedColor) {
 			const mcstatus = await fetch(`https://api.mcsrvstat.us/2/${server}`)
 				.then(response => response.json())
-				.catch(error => console.log(error));
+				.catch(error => console.error(error));
 
 			//  if not online, status is unknown, therefore invalid or irretrievable, so exit.
 			if (mcstatus.online != true) {return message.channel.send(`Could not get the status of \`${server}\``);}
 			// otherwise, send an embed containing the fetched data.
 			const serverStatus = new Discord.MessageEmbed(server, embedColor)
-				.setColor(embedColor)
+				.setColor(mcColor)
 				.setTitle(`Server Status of \`${server}\``)
 				.setDescription(mcstatus.motd.clean)
 				.setThumbnail(`https://api.mcsrvstat.us/icon/${server}`)

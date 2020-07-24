@@ -32,22 +32,21 @@ process.on('unhandledRejection', error => {console.error('Unhandled promise reje
 
 // begin command section
 client.on('message', message => {
-	console.log(`[${message.author.tag}: ${message.content}]`);
+	console.log(`--[${message.author.tag}: ${message.content}]--`);
 
+	// random chance to change the status, unless the command is one of those blacklisted below
 	if (!message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart'])) {
-	// random chance to change the status, unless the command is one of those blacklisted above
 		const randomNumber = (Math.floor(Math.random() * 20));
 		if (randomNumber >= 19) {randomStatus();}
 	}
 
 	// help function when mentioned and asked 'help'
 	if (message.content.includes(client.user.id) && message.content.includes('help')) {client.commands.get('help').execute(message);}
-
 	// checks if contains bot's prefix and executes accordingly
 	if (!message.content.startsWith(prefix)) {
-		// checks if a user was mentioned (not a command) along with '++' for the rep system
 		if (message.content.endsWith('++') === true && message.channel.type == 'text') {
 			// determines if someone was @ or guess is needed
+			// TO DO: Implement regex for getting the mentioned user
 			if (message.mentions.users.first() != undefined) {repFind(message, message.mentions.users.first());}
 			else {findUser(message);}
 		}
@@ -145,16 +144,10 @@ function findUser(message) {
 				if (!matchFound) {
 				// checks if user data array has nickname to avoid errors
 					if (member.nickname != null) {
-						if (member.user.username.match(userRegex)) {
-							matchFound = true; return repFind(message, member.user);
-						}
-						else if (member.nickname.match(userRegex)) {
-							matchFound = true; return repFind(message, member.user, member.nickname);
-						}
+						if (member.user.username.match(userRegex)) { matchFound = true; return repFind(message, member.user); }
+						else if (member.nickname.match(userRegex)) { matchFound = true; return repFind(message, member.user, member.nickname); }
 					}
-					else if (member.user.username.match(userRegex)) {
-						matchFound = true; return repFind(message, member.user);
-					}
+					else if (member.user.username.match(userRegex)) { matchFound = true; return repFind(message, member.user); }
 				}
 			});
 		},

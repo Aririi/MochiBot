@@ -15,7 +15,6 @@ module.exports = {
 			.setColor(helpColor)
 			.setTitle(`${name}'s Commands:`)
 			.attachFiles(['./media/MochiBot-64.png'])
-			// .setThumbnail('attachment://MochiBot-64.png')
 			.addFields(
 				{ name: `${name}'s current prefix: \`${prefix}\``, value: '\u200B', inline: false },
 				{ name: 'Command List:', value: `\`${commands.map(command => command.name).join(', ')}\`` },

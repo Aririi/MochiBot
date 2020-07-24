@@ -2,10 +2,10 @@ const { prefix } = require('../config.json');
 module.exports = {
 	name: 'makerole',
 	description: 'Makes a role with provided color and name.',
-	cooldown: 5,
+	cooldown: 10,
 	aliases: ['createrole'],
 	guildOnly: true,
-	usage: '[#hexColor] [name-phrase]',
+	usage: '[#hexColor] [name]',
 	args: true,
 	execute(message, args) {
 		const roleColor = args[0].replace('#', '');

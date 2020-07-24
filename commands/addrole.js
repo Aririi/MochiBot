@@ -5,7 +5,7 @@ module.exports = {
 	name: 'addrole',
 	description: 'Makes a role with provided color and name. (experimental, needs rework)',
 	cooldown: 5,
-	aliases: ['add-role'],
+	aliases: ['applyrole'],
 	guildOnly: [true],
 	usage: '[mentioned user] [role]',
 	args: true,
