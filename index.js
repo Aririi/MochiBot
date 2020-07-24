@@ -27,12 +27,8 @@ client.once('ready', () => {
 });
 
 // initial launch and connection issue handles
-client.on('shardError', error => {
-	console.error('A websocket connection encountered an error:', error);
-});
-process.on('unhandledRejection', error => {
-	console.error('Unhandled promise rejection:', error);
-});
+client.on('shardError', error => {console.error('A websocket connection encountered an error:', error);});
+process.on('unhandledRejection', error => {console.error('Unhandled promise rejection:', error);});
 
 // begin command section
 client.on('message', message => {
@@ -44,18 +40,8 @@ client.on('message', message => {
 		if (randomNumber >= 19) {randomStatus();}
 	}
 
-	// TO DO add help function when mentioned and asked 'help'
-	// if (message.content.includes('<@!695021478491717677> help')) {
-	// 	try {
-	// 		const command = 'help.js';
-	// 		command.execute(message);
-	// 	}
-	// 	catch (error) {
-	// 		console.error(error);
-	// 		message.reply('there was an error trying to execute that command.');
-	// 		message.channel.send(error).catch(console.error);
-	// 	}
-	// }
+	// help function when mentioned and asked 'help'
+	if (message.content.includes(client.user.id) && message.content.includes('help')) {client.commands.get('help').execute(message);}
 
 	// checks if contains bot's prefix and executes accordingly
 	if (!message.content.startsWith(prefix)) {
@@ -76,7 +62,7 @@ client.on('message', message => {
 		const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-		if (!command) return message.channel.send('That\'s not a command I recognize.');
+		if (!command) return message.channel.send('That\'s not a command I recognize.').then(sentMessage => sentMessage.delete({ timeout: 5000 }));
 		if (message.author.bot) return;
 
 		// checks if command is server-only via command property
@@ -124,8 +110,8 @@ client.on('message', message => {
 });
 
 
+// randomly sets status based on RNG
 function randomStatus() {
-	// randomly sets status based on RNG
 	const randomNumberResult = (Math.floor(Math.random() * 6));
 	const readyUserActivity = [
 		['PLAYING', 'with bits and bytes.'],
@@ -140,12 +126,16 @@ function randomStatus() {
 		.catch(console.error);
 }
 
-
 // matches text to a member in the guild, if applicable (so @ becomes optional)
 function findUser(message) {
-	let firstWord = message.content.split(' ', 1);
-	firstWord = firstWord[0].replace('++', '');
-	const userRegex = new RegExp(`(${firstWord})`, 'g');
+	let toMatch = message.content.split(' ', 2);
+	if (toMatch[1] != undefined) {
+		const first = toMatch[0].replace('++', '');
+		const second = toMatch[1].replace('++', '');
+		toMatch = `${first} ${second}`;
+	}
+	else {toMatch = toMatch[0].replace('++', '');}
+	const userRegex = new RegExp(`(${toMatch})`, 'g');
 	let matchFound = false;
 	// fetches all members and checks each if there's a match
 	message.guild.members.fetch()
@@ -171,6 +161,7 @@ function findUser(message) {
 		)
 		.catch(error => console.log(error));
 }
+
 
 // finds and adds reputation in the database when conditions met
 function repFind(message, user, nickname) {

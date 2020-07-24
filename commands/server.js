@@ -1,26 +1,35 @@
 const Discord = require('discord.js');
-const { prefix, serverColor } = require('../config.json');
+const { prefix, name, serverColor } = require('../config.json');
+let size;
 
 module.exports = {
 	name: 'server',
-	description: 'Displays server information.',
+	description: 'Displays information on the current guild/server.',
 	guildOnly: true,
-	aliases: ['server-info'],
+	aliases: ['guild'],
 	execute(message) {
+		const guild = message.guild;
+		// if a guild >250 members, its classified as 'large'
+		if (guild.large != true) {size = 'Small';}
+		else {size = 'Large';}
+
 		const ServerInfo = new Discord.MessageEmbed()
-			.setColor(serverColor)
-			.setTitle(`${message.guild.name}`)
+			.setAuthor(`${name}'s Server Info`, 'attachment://MochiBot-64.png', 'https://github.com/Aririi/MochiBot')
 			.attachFiles(['./media/MochiBot-64.png'])
-			.setThumbnail(`https://cdn.discordapp.com/icons/${message.guild.icon}.png?size=128`)
+			.setColor(serverColor)
+			.setTitle(guild.name)
+			.setThumbnail(`${guild.iconURL({ dynamic: true })}?size=2048`)
 			.addFields(
-				{ name: 'Server Name:', value: `${message.guild.name}`, inline: true },
-				{ name: 'Server Owner:', value: `${message.guild.owner}`, inline: true },
-				{ name: 'Server Region:', value: `${message.guild.region}`, inline: true },
-				{ name: 'Nitro Premium Tier:', value: `${message.guild.premiumTier}`, inline: true },
-				{ name: 'Nitro Booster count:', value: `${message.guild.premiumSubscriptionCount}`, inline: true },
-				{ name: 'MochiBot\'s prefix in this server:', value: `\`${prefix}\``, inline: false },
+				{ name: 'Owner:', value: guild.owner, inline: false },
+				{ name: 'Region:', value: guild.region, inline: true },
+				{ name: 'ID:', value: guild.id, inline: true },
+				{ name: `${name}'s prefix in this server: \`${prefix}\``, value: '\u200B', inline: false },
+
+				{ name: 'Member count:', value: `${guild.memberCount} (${size})`, inline: true },
+				{ name: 'Emoji count:', value: guild.emojis.cache.size, inline: true },
+				{ name: 'Role count:', value: guild.roles.cache.size, inline: true },
+				{ name: `Nitro Premium Tier ${guild.premiumTier}`, value: `from ${guild.premiumSubscriptionCount} boosters`, inline: false },
 			)
-			.setAuthor('MochiBot\'s Server Summary', 'attachment://MochiBot-64.png', 'https://github.com/[placeholderURL]')
 			.setTimestamp()
 			.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 		message.channel.send(ServerInfo);
