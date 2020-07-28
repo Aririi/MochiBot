@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { userColor, name } = require('../config.json');
+const { name, repoURL, userColor } = require('../config.json');
 let userEmbed; let title; let lastMsg;
 
 // matches text to a member in the guild, if applicable (so @ becomes optional)
@@ -22,7 +22,7 @@ function findUser(message, args, sendUser) {
 			});
 			if (!matchFound) {message.channel.send('Couldn\'t find that user...');}
 		},
-		).catch(error => console.log(error));
+		).catch(error => console.error(error));
 }
 
 
@@ -69,7 +69,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 
-			message.channel.send(userEmbed).catch(error => console.log(error));
+			message.channel.send(userEmbed).catch(error => console.error(error));
 		}
 
 		function sendGuildUser(userToCheck) {
@@ -110,7 +110,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 
-			message.channel.send(userEmbed).catch(error => console.log(error));
+			message.channel.send(userEmbed).catch(error => console.error(error));
 		}
 	},
 };

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { userColor } = require('../config.json');
+const { userColor, repoURL } = require('../config.json');
 
 function findUser(message, args, sendAvatar) {
 	const userRegex = new RegExp(`(${args.join(' ')})`, 'g');
@@ -20,7 +20,7 @@ function findUser(message, args, sendAvatar) {
 			});
 			if (!matchFound) {message.channel.send('Couldn\'t find that user...');}
 		},
-		).catch(error => console.log(error));
+		).catch(error => console.error(error));
 }
 
 
@@ -57,7 +57,7 @@ module.exports = {
 				.setColor(userColor)
 				.setTitle(title)
 				.setImage(`${user.displayAvatarURL({ dynamic:true })}?size=2048`)
-				.setAuthor('MochiBot\'s User Database', 'attachment://MochiBot-64.png', 'https://github.com/Aririi/MochiBot')
+				.setAuthor('MochiBot\'s User Database', 'attachment://MochiBot-64.png', repoURL)
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 			message.channel.send(avatarEmbed);

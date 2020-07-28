@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { prefix, name, serverColor } = require('../config.json');
+const { prefix, name, repoURL, serverColor } = require('../config.json');
 let size;
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
 		else {size = 'Large';}
 
 		const ServerInfo = new Discord.MessageEmbed()
-			.setAuthor(`${name}'s Server Info`, 'attachment://MochiBot-64.png', 'https://github.com/Aririi/MochiBot')
+			.setAuthor(`${name}'s Server Info`, 'attachment://MochiBot-64.png', repoURL)
 			.attachFiles(['./media/MochiBot-64.png'])
 			.setColor(serverColor)
 			.setTitle(guild.name)

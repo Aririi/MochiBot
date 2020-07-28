@@ -1,38 +1,47 @@
 module.exports = {
 	name: '8ball',
 	description: 'Responds to a question with a certain response.',
-	aliases: ['magic-ball', 'fortune-teller', 'bowling-ball'],
+	aliases: ['eightball', 'magicball', 'fortuneteller', 'bowlingball'],
 	usage: '[question]',
 	args: true,
 	execute(message) {
-		// checks if has '?'
-		const questionMark = message.content.match(/[?]/);
 		const ballUser = message.author.username;
-		if (questionMark == null) {
-			message.channel.send(`${ballUser}: I don't think that's a question.`);
-		}
-		// if is question, do 2 RNGs
-		// made to increase randomness of 8ball due to frequent repeats in flps
-		else if (questionMark == '?') {
-			let eightBall = (Math.ceil(Math.random() * 6));
-			const eightBall2 = (Math.ceil(Math.random() * 6));
-			let randomChoice = (Math.ceil(Math.random() * 2));
-			if (randomChoice == 1) {randomChoice = '+';}
-			if (randomChoice != 1) {randomChoice = '-';}
-			// console.log(eightBall, eightBall2, randomChoice);
-			// if they match, add/subtract them, for volatility
-			if (eightBall == eightBall2) {eightBall = eightBall | randomChoice | 1;}
-			const responses = [
-				`${ballUser}: Looks like a 50-50.`,
-				`${ballUser}: Signs point to yes.`,
-				`${ballUser}: Without a doubt.`,
-				`${ballUser}: Reply hazy, try again...`,
-				`${ballUser}: My reply is no.`,
-				`${ballUser}: Outlook not so good.`,
-				`${ballUser}: [ The bowling ball doesn't answer. ]`,
-				`${ballUser}: Perhaps...`,
-			];
-			message.channel.send(responses[eightBall]);
+		const responses = [
+			'It is certain.',
+			'It is decidedly so.',
+			'Without a doubt.',
+			'Yes – definitely.',
+			'You may rely on it.',
+			'As I see it, yes.',
+			'Outlook good.',
+			'Perhaps...',
+			'Signs point to yes.',
+			'Reply hazy, try again...',
+			'Ask again later.',
+			'Looks like a 50-50.',
+			'Better not tell you now.',
+			'Cannot predict now.',
+			'Await and see... Or ask once more.',
+			'Concentrate and ask again.',
+			'[ The bowling ball doesn\'t answer. ]',
+			'Don\'t count on it.',
+			'My reply is no.',
+			'My sources say no.',
+			'Outlook not so good.',
+		];
+
+		if (!message.content.includes('?')) {return message.channel.send(`${ballUser}: I don't think that's a question.`);}
+		else {
+			let eightBall = (Math.floor(Math.random() * responses.length));
+			let randomChoice = (Math.floor(Math.random() * 2));
+			switch (randomChoice) {
+			case 0: randomChoice = '+'; break;
+			case 1: randomChoice = '-'; break;
+			}
+			// if the two RNGs match, add/subtract them, for volatility
+			if (eightBall === Math.floor(Math.random() * responses.length) && (eightBall != 8 || eightBall != 0)) {eightBall = eightBall | randomChoice | 1;}
+
+			message.channel.send(`${ballUser}: ${responses[eightBall]}`);
 		}
 	},
 };

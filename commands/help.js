@@ -1,5 +1,5 @@
 const { prefix, helpColor } = require('../config.json');
-let { name } = require('../config.json');
+let { name, repoURL } = require('../config.json');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
 				{ name: 'Command List:', value: `\`${commands.map(command => command.name).join(', ')}\`` },
 				{ name: 'How to get more information:', value: `\nYou can send \`${prefix}help [command name]\` to get info on a specific command.` },
 			)
-			.setAuthor(`${name} Matrix`, 'attachment://MochiBot-64.png', 'https://github.com/Aririi/MochiBot')
+			.setAuthor(`${name} Matrix`, 'attachment://MochiBot-64.png', repoURL)
 			.setTimestamp()
 			.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 		// checks if command was from dm and provides differently formatted reply

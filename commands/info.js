@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { name, prefix, infoColor } = require('../config.json');
+const { name, prefix, repoURL, infoColor } = require('../config.json');
 const alias = name.toLowerCase();
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
 					{ name: 'Help:', value: `\`${prefix}help\`` },
 					{ name: `${name}'s prefix in this server: \`${prefix}\``, value: '\u200B', inline: false },
 				)
-				.setAuthor(name, 'attachment://MochiBot.png', 'https://github.com/Aririi/MochiBot')
+				.setAuthor(name, 'attachment://MochiBot.png', repoURL)
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 

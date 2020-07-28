@@ -5,6 +5,6 @@ module.exports = {
 	execute(message) {
 		const responseTime = Math.round(Date.now() - message.createdTimestamp);
 		// This will round the response time between when the message was received and when the message was sent
-		message.channel.send(`Ponged in ${responseTime}ms.`);
+		message.channel.send(`Pong! (Discord reply in ${responseTime}ms)`);
 	},
 };

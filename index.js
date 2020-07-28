@@ -3,8 +3,16 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token, owner } = require('./config.json');
 const Datastore = require('nedb');
-const repDB = new Datastore({ filename: './databases/rep.db', autoload: true });
-const timeDB = new Datastore({ filename: './databases/reminders.db', autoload: true });
+const repDB = new Datastore({ filename: './databases/rep.db' });
+repDB.loadDatabase(function(err) {
+	if (err) {return console.error(err);}
+	else {return;}
+});
+const timeDB = new Datastore({ filename: './databases/reminders.db' });
+timeDB.loadDatabase(function(err) {
+	if (err) {return console.error(err);}
+	else {return;}
+});
 const client = new Discord.Client();
 // TO DO library/file for possible statuses — const { readyUserActivity } = require('./commands/randomstatus.js');
 
