@@ -1,7 +1,7 @@
 // require the discord.js module and config
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token, owner } = require('./config.json');
+const { prefix, owner } = require('./config.json');
 const Datastore = require('nedb');
 const repDB = new Datastore({ filename: './databases/rep.db' });
 repDB.loadDatabase(function(err) {
@@ -148,10 +148,10 @@ function findUser(message) {
 				if (!matchFound) {
 				// checks if user data array has nickname to avoid errors
 					if (member.nickname != null) {
-						if (member.user.username.match(userRegex)) { matchFound = true; return rep.execute(repDB, message, member.user); }
-						else if (member.nickname.match(userRegex)) { matchFound = true; return rep.execute(repDB, message, member.user, member.nickname); }
+						if (member.user.username.match(userRegex)) {matchFound = true; return rep.execute(repDB, message, member.user);}
+						else if (member.nickname.match(userRegex)) {matchFound = true; return rep.execute(repDB, message, member.user, member.nickname);}
 					}
-					else if (member.user.username.match(userRegex)) { matchFound = true; return rep.execute(repDB, message, member.user); }
+					else if (member.user.username.match(userRegex)) {matchFound = true; return rep.execute(repDB, message, member.user);}
 				}
 			});
 		},
@@ -160,6 +160,5 @@ function findUser(message) {
 }
 
 
-
 // login to Discord with your app's token
-client.login(token);
+const { token } = require('./token.json'); client.login(token);
