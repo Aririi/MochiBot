@@ -28,10 +28,9 @@ module.exports = {
 	name: 'avatar',
 	description: 'Get the avatar URL of the mentioned user, or your own avatar if none are tagged.',
 	aliases: ['icon', 'pfp'],
-	usage: '[mention/username/nickname]',
+	usage: '<mention/username/nickname>',
 	execute(message, args, client) {
 		let title;
-
 		if (args[0] != undefined) {
 			const userID = args[0].match(/^<@!?(\d+)>$/);
 			// if DM, searching not possible

@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const { randomColor, name, owner } = require('../config.json');
-// TO DO: add parameter for second argument to allow looping (multiple calls in one message)
+const nekoLifeClient = require('nekos.life');
+const nekolife = new nekoLifeClient;
 
 module.exports = {
 	name: 'random',
@@ -8,10 +9,6 @@ module.exports = {
 	usage: '[avatar/icon/pfp, cat/meow, dog/woof, foxgirl, goose, gecg, kemonomimi, neko/nyan, nekogif/nyangif, waifu] [#(opt)]',
 	args: true,
 	execute(message, args) {
-		// required to init nekos.life wrapper
-		const nekoLifeClient = require('nekos.life');
-		const nekolife = new nekoLifeClient;
-
 		// async functions to be executed based on the argument given
 		async function randomAvatar() {
 			const description = 'Here\'s a random avatar.';
@@ -65,10 +62,10 @@ module.exports = {
 			const description = 'Here\'s a random wallpaper.';
 			await nekolife.sfw.wallpaper().then(result => sendEmbed(description, result.url));
 		}
-		// async function random() {
-		// 	const result = await nekolife.sfw.[placeholder]().then(result => sendEmbed(description, result)));
-		// 	const description = 'Here\'s a random [placeholder] image.';
-		// }
+		async function randomFact() {
+			// const description = 'Here\'s a random fact.';
+			await nekolife.sfw.fact().then(result => message.channel.send(`${message.author.username}: ${result.fact}.`));
+		}
 
 
 		// loops if second argument contains number
@@ -100,6 +97,7 @@ module.exports = {
 			else if (args[0] === 'nekogif' || args[0] === 'nyangif') {randomNekoGIF();}
 			else if (args[0] === 'waifu') {randomWaifu();}
 			else if (args[0] === 'wallpaper') {randomWallpaper();}
+			else if (args[0] === 'fact') {randomFact();}
 			else {message.channel.send(`I don't know how to get "${args[0]}," maybe recommend it to the developer?`);}
 		}
 		function sendEmbed(description, result) {

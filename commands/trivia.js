@@ -62,7 +62,7 @@ module.exports = {
 			base64 = trivia.question; buff = Buffer.from(base64, 'base64');
 			const question = buff.toString('utf-8');
 			base64 = trivia.correct_answer; buff = Buffer.from(base64, 'base64');
-			const correctAnswer = buff.toString('utf-8');
+			const correctAnswer = buff.toString('utf-8').trim();
 			trivia.incorrect_answers.forEach(answer => {
 				base64 = answer; buff = Buffer.from(base64, 'base64');
 				incorrectAnswers.push(buff.toString('utf-8'));
@@ -75,10 +75,9 @@ module.exports = {
 				correctNumber = incorrectAnswers.push(correctAnswer); allAnswers = incorrectAnswers;
 				index = Math.floor(Math.random() * (allAnswers.length - 1));
 				while (index > 0) {
-					index--; correctNumber++;
+					index--; correctNumber--;
 					temp = allAnswers.shift(); allAnswers.push(temp);
 				}
-				if (correctNumber > allAnswers.length) {correctNumber = correctNumber - allAnswers.length;}
 				attempts = allAnswers.length - 2;
 				// changes array into Discord formatted string list for the embed
 				allAnswers.forEach((item, x) => {
@@ -135,7 +134,7 @@ module.exports = {
 			const collector = message.channel.createMessageCollector(filter, { time: 30 * 1000 });
 			let answered = false;
 			collector.on('collect', m => {
-				text = m.content.toLowerCase();
+				text = m.content;
 				// once timeout completes, 10 seconds have passed, allowing others to answer
 				if (time != 10 && m.author.id != message.author.id) {
 					return message.channel.send(`${m.author.username}: Please wait before answering.`).then(sentMessage => sentMessage.delete({ timeout: 3000 }));
@@ -170,12 +169,12 @@ module.exports = {
 		// adds the stat to the db if answer was correct
 		function triviaAdd(m) {
 			triviaDB.find({ _id: m.author.id }, function(err, docs) {
-				if (err != null) {console.log(`DB ERROR: Could not search successfully: ${err}`);}
+				if (err) {console.log(`DB ERROR: Could not search successfully: ${err}`);}
 				// if no matches, create an entry in the db
 				if (docs.length === 0) {
 					console.log('Failure to find a matching ID, creating a new entry...');
 					triviaDB.insert([{ _id: m.author.id, easy: 0, medium: 0, hard: 0, multiple: 0, boolean: 0, name: m.author.username }], function(err) {
-						if (err != null) {console.log(`DB ERROR: Failed to make new entry. '${err}'`);}
+						if (err) {console.log(`DB ERROR: Failed to make new entry. '${err}'`);}
 						else {triviaAdd(m);}
 					});
 				}
@@ -192,7 +191,7 @@ module.exports = {
 					}
 					triviaDB.update({ _id: m.author.id }, triviaUpdate, {}, function(err) {
 						// error catch if adding points fails
-						if (err != null) { message.channel.send('There was an error adding a point to the user.'); console.log(`DB ERROR: Failed to update existing entry. '${err}'`); }
+						if (err) { message.channel.send('There was an error adding a point to the user.'); console.log(`DB ERROR: Failed to update existing entry. '${err}'`); }
 						else {return console.log(`DB: Success in adding 1 to ${difficulty} and ${type}`);}
 					});
 				}

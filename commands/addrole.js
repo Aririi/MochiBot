@@ -7,7 +7,7 @@ module.exports = {
 	cooldown: 5,
 	aliases: ['applyrole'],
 	guildOnly: [true],
-	usage: '[mentioned user] [role]',
+	usage: '<mentioned user> <role>',
 	args: true,
 	execute(message) {
 		const regex = new RegExp(`^${prefix}addrole|${prefix}add-role`, 'gi');

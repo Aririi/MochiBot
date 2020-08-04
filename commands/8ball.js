@@ -2,7 +2,7 @@ module.exports = {
 	name: '8ball',
 	description: 'Responds to a question with a certain response.',
 	aliases: ['eightball', 'magicball', 'fortuneteller', 'bowlingball'],
-	usage: '[question]',
+	usage: '<question>',
 	args: true,
 	execute(message) {
 		const ballUser = message.author.username;

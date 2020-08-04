@@ -23,6 +23,6 @@ module.exports = {
 		console.log(`STATUS: Changed to type ${type} and text "${text}"`);
 		client.user.setActivity(text, { type: type })
 			.then(message.channel.send(`Status changed to '${type}' with text '${text}'`))
-			.catch(console.error);
+			.catch(error => console.error(error));
 	},
 };

@@ -8,6 +8,7 @@ module.exports = {
 	guildOnly: true/false,
 	usage: '[]',
 	devOnly: true/false,
+	args: true,
 	execute(message) {
 
   }

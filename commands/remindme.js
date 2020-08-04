@@ -1,8 +1,8 @@
 module.exports = {
 	name: 'remindme',
 	description: 'Reminds you you with a message, given a certain time after sending it.',
-	aliases: ['reminder', 'setreminder', 'set-reminder'],
-	usage: '[time (ddhhmm)] [what to be reminded of]',
+	aliases: ['reminder', 'setreminder'],
+	usage: '<desired time until (ddhhmm)> <reminder>',
 	args: true,
 	execute(message, args, client, timeDB) {
 		// gets current time to compare for later
@@ -68,7 +68,7 @@ module.exports = {
 			const reminder = { userID: message.author.id, channelID: message.channel.id, time: timeToRemind, text: reminderText };
 			timeDB.insert(reminder, function(err) {
 				// error catch with entry attempt
-				if (err != null) {
+				if (err) {
 					message.channel.send('There was an error creating that reminder.');
 					console.log(`DB ERROR: Failed to make new reminder. '${err}'`);
 				}
@@ -90,7 +90,7 @@ module.exports = {
 			// looks for a matching reminder with time under within 2 seconds in case of rounding
 			timeDB.find({ time: { $gte: timeNow - 2 } }, function(err, docs) {
 				// error catch
-				if (err != null) {
+				if (err) {
 					message.channel.send('There was an error trying to find a reminder.');
 					return console.log(`DB ERROR: Failed to search for reminder. '${err}'`);
 				}
@@ -103,7 +103,7 @@ module.exports = {
 					channel.send(reminderToSend);
 					// removes the reminder from the database, so a match isn't found again
 					timeDB.remove({ _id: docs[0]._id }, {}, function(err) {
-						if (err != null) {
+						if (err) {
 							message.channel.send('There was an error removing the sent reminder.');
 							console.log(`DB ERROR: Failed to remove sent reminder. '${err}'`);
 						}

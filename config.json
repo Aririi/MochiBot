@@ -1,12 +1,13 @@
 {
 	"prefix": "~",
-	"token": "Njk1MDIxNDc4NDkxNzE3Njc3.XvLQyg.0_MEHLBKFKN4sNlbF9-OevHI_Kw",
 	"name": "MochiBot",
+	"repoURL": "https://github.com/Aririi/MochiBot",
+	"translateKey": "null",
 	"infoColor": "#E7A84B",
 	"userColor": "#FEB047",
-	"serverColor": "#FEB047",
+	"serverColor": "#E7A84B",
 	"mcColor": "#FEB047",
-	"helpColor:": "#FEB047",
-	"randomColor": "#FEB047",
+	"helpColor:": "#E7A84B",
+	"triviaColor": "#FEB047",
 	"owner": 335186179521642498
 }
