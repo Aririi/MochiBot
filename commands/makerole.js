@@ -5,7 +5,7 @@ module.exports = {
 	cooldown: 10,
 	aliases: ['createrole'],
 	guildOnly: true,
-	usage: '[#hexColor] [name]',
+	usage: '<#hexColor] [name>',
 	args: true,
 	execute(message, args) {
 		const roleColor = args[0].replace('#', '');

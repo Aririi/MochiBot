@@ -5,7 +5,7 @@ module.exports = {
 	description: 'Rolls die with given amount of dice and given number of sides.',
 	cooldown: 1.5,
 	aliases: ['dice'],
-	usage: '[amount][type]',
+	usage: '<amount][type>',
 	args: true,
 	execute(message, args) {
 		// splits first arg into amount and type

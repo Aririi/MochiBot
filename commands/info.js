@@ -5,7 +5,7 @@ const alias = name.toLowerCase();
 module.exports = {
 	name: 'info',
 	description: 'Shows bot info.',
-	aliases: ['information', 'about', 'bot', alias],
+	aliases: ['information', 'about', alias],
 	execute(message) {
 		// sends temp message while embed sends
 		message.channel.send('Compiling matrices. Stand by...').then(sentMessage => {
@@ -16,7 +16,7 @@ module.exports = {
 				.attachFiles(['./media/MochiBot.png'])
 				.setThumbnail('attachment://MochiBot.png')
 				.setDescription(`
-					${name} was originally designed for Yee Yee University.
+					This bot was originally designed for Yee Yee University.
 					Completed or WIP functionality: Quotes, reactions, points, gifs, images, games, and more.
 					Largely inspired from LanteaBot/MichiBot by Michiyo on the OpenComputers server.`)
 				.addFields(

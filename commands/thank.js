@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Thanks a user.',
 	aliases: ['thanks'],
 	cooldown: 5,
-	usage: '[mentioned user]',
+	usage: '<mentioned user>',
 	execute(message) {
 		if (!message.mentions.users.size) {return message.channel.send(`You're welcome, ${message.author.username}`);}
 		const thank = message.mentions.users.map(user => {

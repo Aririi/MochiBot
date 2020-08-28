@@ -6,9 +6,8 @@ module.exports = {
   cooldown: #,
 	aliases: ['',''],
 	guildOnly: true/false,
-	usage: '[]',
+	usage: '<>',
 	devOnly: true/false,
-	args: true,
 	execute(message) {
 
   }

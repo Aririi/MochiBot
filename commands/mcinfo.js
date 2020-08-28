@@ -6,7 +6,7 @@ module.exports = {
 	name: 'mcinfo',
 	description: 'Retrieves server status of a given Minecraft server using `api.mcsrvstat.us`',
 	cooldown: 10,
-	usage: '[ip address/hostname]',
+	usage: '<ip address/hostname>',
 	execute(message, args) {
 		// function will use mcsrvstat API to get the status
 		async function mcInfo(server, embedColor) {

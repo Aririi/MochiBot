@@ -4,7 +4,7 @@ let userEmbed; let title; let lastMsg;
 
 // matches text to a member in the guild, if applicable (so @ becomes optional)
 function findUser(message, args, sendUser) {
-	const userRegex = new RegExp(`(${args.join(' ')})`, 'g');
+	const userRegex = new RegExp(`(${args.join(' ')})`, 'gi');
 	let matchFound = false;
 	// fetches all members and checks each if there's a match
 	message.guild.members.fetch()
@@ -30,7 +30,7 @@ module.exports = {
 	name: 'user',
 	description: 'Displays user information of author or mentioned user.',
 	aliases: ['user-info'],
-	usage: '[username/nickname]',
+	usage: '<username/nickname>',
 	execute(message, args, client) {
 		// arg and command exec location checks
 		// if an argument is provided, assume author is asking for another user's data
@@ -65,7 +65,7 @@ module.exports = {
 					{ name: 'Last known message:', value: lastMsg, inline: true },
 					{ name: 'Creation Date:', value: `${userToCheck.createdAt}` },
 				)
-				.setAuthor(`${name}'s User Summary`, 'attachment://MochiBot-64.png', 'https://github.com/[placeholderURL]')
+				.setAuthor(`${name}'s User Summary`, 'attachment://MochiBot-64.png', repoURL)
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 
@@ -106,7 +106,7 @@ module.exports = {
 					{ name: 'Roles on this server:', value: roleNames },
 					{ name: 'Joined this server on:', value: guildJoinTime },
 				)
-				.setAuthor(`${name}'s User Summary`, 'attachment://MochiBot-64.png', 'https://github.com/[placeholderURL]')
+				.setAuthor(`${name}'s User Summary`, 'attachment://MochiBot-64.png', repoURL)
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 

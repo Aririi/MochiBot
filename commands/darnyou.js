@@ -6,9 +6,7 @@ module.exports = {
 	cooldown: 5,
 	aliases: ['heckyou', 'kys'],
 	execute(message) {
-		if (message.author.id == owner) {
-			message.channel.send('I\'m sorry to have disappointed you, creator...');
-		}
+		if (message.author.id === owner) {return message.channel.send('I\'m sorry to have disappointed you, creator...');}
 		else {message.channel.send('Sorry to disappoint. (っ- ‸ – ς)');}
 	},
 };

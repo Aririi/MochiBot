@@ -2,7 +2,7 @@ module.exports = {
 	name: 'ban',
 	description: 'Bans the mentioned user.',
 	guildOnly: true,
-	usage: '[mentioned user]',
+	usage: '<mention>',
 	args: true,
 	execute(message, args) {
 		const taggedUser = message.mentions.users.first();

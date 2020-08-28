@@ -15,7 +15,7 @@ module.exports = {
 	execute(message, args, client) {
 		const randomNumberResult = (Math.floor(Math.random() * readyUserActivity.length));
 		function successCallback() {
-			console.log(`The status has been changed to '${readyUserActivity[randomNumberResult][0]} ${readyUserActivity[randomNumberResult][1]}'`);
+			console.log(`${message.author.username} to '${readyUserActivity[randomNumberResult][0]} ${readyUserActivity[randomNumberResult][1]}'`);
 			message.channel.send('The status has been shuffled.');
 		}
 		client.user.setActivity(readyUserActivity[randomNumberResult][1], { type: readyUserActivity[randomNumberResult][0] })

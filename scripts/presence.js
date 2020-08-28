@@ -6,7 +6,7 @@ module.exports = {
 			if (newPresence.activities[1].createdTimestamp < newPresence.activities[0].createdTimestamp) {time = newPresence.activities[1].createdTimestamp;}
 			else {time = newPresence.activities[0].createdTimestamp;}
 		}
-		const presence = { _id: newPresence.userID, tag: tag, time: time, server: newPresence.guild.name, status: newPresence.status, clientstatus: newPresence.clientStatus, activities: newPresence.activities };
+		const presence = { _id: newPresence.userID, tag: tag, time: time, server: newPresence.guild.name, serverid: newPresence.guild.id, status: newPresence.status, clientstatus: newPresence.clientStatus, activities: newPresence.activities };
 		presenceDB.find({ _id: newPresence.userID }, function(err, docs) {
 			if (err) {return console.error(err);}
 			// if match, update it, else insert new

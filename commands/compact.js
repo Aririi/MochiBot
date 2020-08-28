@@ -2,7 +2,7 @@ module.exports = {
 	name: 'compact',
 	description: 'Compacts a database manually if needed. (devOnly)',
 	aliases: ['condense'],
-	usage: '[db name]',
+	usage: '<db name>',
 	devOnly: true,
 	args: true,
 	execute(message, args) {

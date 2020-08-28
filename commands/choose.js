@@ -2,7 +2,7 @@ module.exports = {
 	name: 'choose',
 	description: 'Chooses between choices using RNG.',
 	aliases: ['pick'],
-	usage: '[option one] or [option two] (more choices - optional)',
+	usage: '<option> (opt: or <option 2> or <option 3>)',
 	args: true,
 	execute(message, args) {
 		let choices; let chosen; let otherChoice;

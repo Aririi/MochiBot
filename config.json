@@ -2,6 +2,7 @@
 	"prefix": "~",
 	"name": "MochiBot",
 	"repoURL": "https://github.com/Aririi/MochiBot",
+	"timezone": "UTC-7",
 	"translateKey": "null",
 	"infoColor": "#E7A84B",
 	"userColor": "#FEB047",

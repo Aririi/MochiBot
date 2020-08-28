@@ -5,7 +5,7 @@ module.exports = {
 	name: 'owo',
 	description: '',
 	aliases: ['owoify', 'owospeak'],
-	usage: '[sentence]',
+	usage: '<sentence>',
 	args: true,
 	execute(message, args) {
 		const toOwo = args.join(' ');
@@ -13,6 +13,6 @@ module.exports = {
 			const owod = await nekolife.sfw.OwOify({ text:toOwo });
 			return owod;
 		}
-		owoify().then(owod => message.channel.send(`${message.author.username}: ${owod.owo}`));
+		owoify().then(owod => message.channel.send(owod.owo));
 	},
 };

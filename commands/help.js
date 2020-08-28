@@ -1,12 +1,12 @@
-const { prefix, helpColor } = require('../config.json');
-let { name, repoURL } = require('../config.json');
+const { prefix, helpColor, repoURL } = require('../config.json');
+let { name } = require('../config.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	name: 'help',
 	description: 'Lists all of my commands or info about a specific command.',
 	aliases: ['commands'],
-	usage: '[command name]',
+	usage: '<command name>',
 	cooldown: 5,
 	execute(message, args) {
 		const data = [];

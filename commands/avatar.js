@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
-const { userColor, repoURL } = require('../config.json');
-
+const { userColor, repoURL, name } = require('../config.json');
 function findUser(message, args, sendAvatar) {
-	const userRegex = new RegExp(`(${args.join(' ')})`, 'g');
+	const userRegex = new RegExp(`(${args.join(' ')})`, 'gi');
 	let matchFound = false;
 	// fetches all members and checks each if there's a match
 	message.guild.members.fetch()
@@ -22,7 +21,6 @@ function findUser(message, args, sendAvatar) {
 		},
 		).catch(error => console.error(error));
 }
-
 
 module.exports = {
 	name: 'avatar',
@@ -56,7 +54,7 @@ module.exports = {
 				.setColor(userColor)
 				.setTitle(title)
 				.setImage(`${user.displayAvatarURL({ dynamic:true })}?size=2048`)
-				.setAuthor('MochiBot\'s User Database', 'attachment://MochiBot-64.png', repoURL)
+				.setAuthor(`${name}'s User Database`, 'attachment://MochiBot-64.png', repoURL)
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
 			message.channel.send(avatarEmbed);

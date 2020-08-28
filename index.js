@@ -18,6 +18,16 @@ presenceDB.loadDatabase(function(err) {
 	if (err) {return console.error(err);}
 	else {return;}
 });
+const vcDB = new Datastore({ filename: './databases/vc.db' });
+vcDB.loadDatabase(function(err) {
+	if (err) {return console.error(err);}
+	else {return;}
+});
+const notifDB = new Datastore({ filename: './databases/notif.db' });
+notifDB.loadDatabase(function(err) {
+	if (err) {return console.error(err);}
+	else {return;}
+});
 const client = new Discord.Client();
 // TO DO library/file for possible statuses — const { readyUserActivity } = require('./commands/randomstatus.js');
 
@@ -35,14 +45,12 @@ for (const file of commandFiles) {
 // scripts collection
 client.scripts = new Discord.Collection();
 const scriptFiles = fs.readdirSync('./scripts').filter(file => file.endsWith('.js'));
-for (const file of scriptFiles) {
-	const script = require(`./scripts/${file}`);
-	client.scripts.set(script.name, script);
-}
+for (const file of scriptFiles) {const script = require(`./scripts/${file}`); client.scripts.set(script.name, script);}
+
 const rep = client.scripts.get('rep');
-async function presenceUpdate(presence, tag) {
-	await client.scripts.get('presence').execute(presenceDB, presence, tag);
-}
+async function presenceUpdate(presence, tag) {await client.scripts.get('presence').execute(presenceDB, presence, tag);}
+async function vcnotify(newState) {await client.scripts.get('vcnotifier').execute(newState, vcDB, notifDB, client);}
+// async function logger(id, tag, content, guild, channel, createdTimestamp)
 
 // when the client is ready, run this code
 client.once('ready', () => {
@@ -57,16 +65,22 @@ client.on('shardError', error => {console.error('A websocket connection encounte
 process.on('unhandledRejection', error => {console.error('Unhandled promise rejection:', error);});
 
 // status logging for lastseen and notify commands
-client.on('presenceUpdate', function(oldPresence, newPresence) {
-	newPresence.guild.members.fetch(newPresence.userID).then(member => presenceUpdate(newPresence, member.user.tag));
-});
+client.on('presenceUpdate', function(oldPresence, newPresence) {newPresence.guild.members.fetch(newPresence.userID).then(member => presenceUpdate(newPresence, member.user.tag));});
 client.on('guildMemberAdd', member => {presenceUpdate(member.presence, member.user.tag);});
+client.on('voiceStateUpdate', function(oldState, newState) {vcnotify(newState);});
 
 
 // command section
 client.on('message', message => {
 	console.log(`-[${message.author.tag}: ${message.content}]-`);
 
+	// if message contains .jfif attachments, convert to jpg and reupload
+	if (message.attachments) {client.scripts.get('jfif-conv').execute(message);}
+	// if has a youtube link, gets its metadata and send it
+	let hasYT = false;
+	if (message.content.search('youtube.com') > -1) {hasYT = true;}
+	if (message.content.search('youtu.be') > -1) {hasYT = true;}
+	if (hasYT) {client.scripts.get('yt-info').execute(message);}
 	// random chance to change the status, unless the command is one of those blacklisted below
 	if (!message.content.includes(['setstatus', 'setpresence', 'setactivity', 'randomstatus', 'shufflestatus', 'restart'])) {
 		const randomNumber = (Math.floor(Math.random() * 20));
@@ -124,7 +138,7 @@ client.on('message', message => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
-		try {command.execute(message, args, client, timeDB, presenceDB);}
+		try {command.execute(message, args, client, timeDB, presenceDB, notifDB);}
 		catch (error) {console.error(error); message.channel.send('There was an error trying to execute that command.');}
 	}
 });
