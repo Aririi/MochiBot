@@ -94,7 +94,7 @@ module.exports = {
 			case 'offline': status += 'as offline'; break;
 			}
 			status += ` about ${timeAgo} ago (${time}) on ${user.server}.`;
-			if (isNaN(args[0])) {status += ` Their ID is \`${user._id}\``;}
+			if (isNaN(args[0])) {status += ` (ID: \`${user._id}\`)`;}
 			message.channel.send(status);
 		}
 	},

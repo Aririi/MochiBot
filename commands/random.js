@@ -78,7 +78,7 @@ module.exports = {
 			await sfw.wallpaper().then(result => sendEmbed(description, result.url));
 		}
 		async function randomFact() {
-			await sfw.fact().then(result => message.channel.send(`${message.author.username}: ${result.fact}.`));
+			await sfw.fact().then(result => message.channel.send(`${result.fact}.`));
 		}
 
 		// loops if second argument contains number

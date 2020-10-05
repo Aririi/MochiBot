@@ -2,13 +2,15 @@
 	"prefix": "~",
 	"name": "MochiBot",
 	"repoURL": "https://github.com/Aririi/MochiBot",
-	"timezone": "UTC-7",
+	"timezone": "UTC",
 	"translateKey": "null",
+	"googleAPIKey": "AIzaSyCSfx245wp7lEqg7T6PsYdUBO3M5UbRrxc",
 	"infoColor": "#E7A84B",
 	"userColor": "#FEB047",
 	"serverColor": "#E7A84B",
 	"mcColor": "#FEB047",
 	"helpColor:": "#E7A84B",
 	"triviaColor": "#FEB047",
+	"xkcdColor": "#FEB047",
 	"owner": 335186179521642498
 }

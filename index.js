@@ -145,14 +145,7 @@ client.on('message', message => {
 
 // matches text to a member in the guild, if applicable (so @ becomes optional)
 function findUser(message) {
-	let toMatch = message.content.split(' ', 2);
-	if (toMatch[1] != undefined) {
-		const first = toMatch[0].replace('++', '');
-		const second = toMatch[1].replace('++', '');
-		toMatch = `${first} ${second}`;
-	}
-	else {toMatch = toMatch[0].replace('++', '');}
-	const userRegex = new RegExp(`(${toMatch})`, 'g');
+	const userRegex = new RegExp(`(${message.content.replace('++', '').trim()})`, 'gi');
 	let matchFound = false;
 	// fetches all members and checks each if there's a match
 	message.guild.members.fetch()
