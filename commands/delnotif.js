@@ -3,6 +3,7 @@ module.exports = {
 	description: 'Removes the given notification. (WIP)',
 	aliases: ['deletenotif', 'removenotif'],
 	usage: '<notification ID>',
+	args: true,
 	execute(message, args, a, b, c, notifDB) {
 		notifDB.remove({ _id: args[0] }, {}, function(err, numRmd) {
 			if (err) {return console.error(err);}

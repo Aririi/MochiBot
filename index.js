@@ -55,7 +55,8 @@ async function vcnotify(newState) {await client.scripts.get('vcnotifier').execut
 // when the client is ready, run this code
 client.once('ready', () => {
 	console.log(`User Tag: ${client.user.tag}\nUser ID: ${client.user.id}\n${client.user.username} is ready for action! :3`);
-	client.scripts.get('randomstatus').execute(client); client.scripts.get('reminder').execute(client, timeDB);
+	// client.scripts.get('randomstatus').execute(client); client.scripts.get('reminder').execute(client, timeDB);
+	client.user.setStatus('offline');
 	// fetches the presences of every member on every connected guild and stores it
 	client.guilds.cache.forEach(guild => guild.members.fetch().then(members => members.forEach(member => {presenceUpdate(member.presence, member.user.tag);})));
 });
@@ -72,7 +73,7 @@ client.on('voiceStateUpdate', function(oldState, newState) {vcnotify(newState);}
 
 // command section
 client.on('message', message => {
-	console.log(`-[${message.author.tag}: ${message.content}]-`);
+	console.log(`-[${message.author.tag}: ${message.cleanContent}]-`);
 
 	// if message contains .jfif attachments, convert to jpg and reupload
 	if (message.attachments) {client.scripts.get('jfif-conv').execute(message);}
@@ -93,21 +94,28 @@ client.on('message', message => {
 	if (!message.content.startsWith(prefix)) {
 		if (message.content.endsWith('++') === true && message.channel.type == 'text') {
 			// determines if someone was @ or guess is needed
-			// TO DO: Implement regex for getting the mentioned user
+			if (message.mentions.users.first() != undefined) {rep.execute(repDB, message, message.mentions.users.first());}
+			else {findUser(message);}
+		}
+		if (message.content.endsWith('++') === true && message.channel.type == 'text') {
+			// determines if someone was @ or guess is needed
 			if (message.mentions.users.first() != undefined) {rep.execute(repDB, message, message.mentions.users.first());}
 			else {findUser(message);}
 		}
 	}
 
 	else {
-	// splits off prefix and makes following text into lowercase
+		// returns if contains double prefix, to avoid bot and/or formatting conflicts
+		if (message.content.startsWith(`${prefix}${prefix}`)) {return;}
+		// splits off prefix and makes following text into lowercase
 		const args = message.content.slice(prefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
 		// finds command and aliases from list
 		const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-		if (!command) return message.channel.send('That\'s not a command I recognize.').then(sentMessage => sentMessage.delete({ timeout: 5000 }));
+		// check for messages starting with '~~' which is markdown for strikethrough and not a command
+		if (message.content.startsWith('~~')) {return;}
+		if (!command) return message.channel.send('That\'s not a command I recognize.').then(sentMessage => sentMessage.delete({ timeout: 3000 }));
 		if (message.author.bot) return;
 
 		// checks if command is server-only via command property
@@ -130,9 +138,10 @@ client.on('message', message => {
 		const cooldownAmount = (command.cooldown || 3) * 1000;
 		if (timestamps.has(message.author.id)) {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-			if (now < expirationTime && message.author.id != owner) {
+			if (now < expirationTime) {
 				const timeLeft = (expirationTime - now) / 1000;
-				return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+				return message.reply(`${message.author.username}: Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
+					.then(sentMessage => sentMessage.delete({ timeout: (timeLeft + 1) * 1000 }));
 			}
 		}
 		timestamps.set(message.author.id, now);

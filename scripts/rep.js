@@ -2,6 +2,14 @@ module.exports = {
 	name: 'rep',
 	execute(repDB, message, user, nickname) {
 		let name;
+		// let operation; let amount = 1;
+		// const args = message.content.split();
+		// if (args[1] === '++' || args[1] === '--') {
+		// 	if (isNaN(args[2])) {amount = args[2];}
+		// }
+		// else if (isNaN(args[1])) {amount = args[1];}
+		// if (message.content.contains('++')) {operation = '+';}
+		// if (message.content.contains('--')) {operation = '-';}
 		function repFind() {
 			if (nickname != undefined) {name = `**${nickname}** (a.k.a. ${user.tag})`;}
 			else {name = `**${user.username}**`;}
@@ -18,19 +26,19 @@ module.exports = {
 					});
 				}
 				// if a match was found, add a point
-				else if (docs[0] != undefined) {repAdd(docs);}
+				else if (docs[0] != undefined) {repModify(docs);}
 			});
 		}
 
-		function repAdd(docs) {
-			// adds one point to the existing for the first match (since its a uuid, only one should exist)
+		function repModify(docs) {
+			// modifies the existing for the first match (since its a uuid, only one should exist)
 			const newPoints = docs[0].points + 1;
+			// const newPoints = `${docs[0].points} ${operation} ${amount}`; console.log(repModify);
 			repDB.update({ _id: user.id }, { _id: user.id, points: newPoints, name: user.username }, {}, function(err) {
 				if (err) {console.error(err);}
 				else {return message.channel.send(`${name} now has ${newPoints} point(s).`);}
 			});
 		}
-
 		repFind();
 	},
 };

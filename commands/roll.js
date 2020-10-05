@@ -3,7 +3,6 @@ const { prefix } = require('../config.json');
 module.exports = {
 	name: 'roll',
 	description: 'Rolls die with given amount of dice and given number of sides.',
-	cooldown: 1.5,
 	aliases: ['dice'],
 	usage: '<amount][type>',
 	args: true,
@@ -12,6 +11,7 @@ module.exports = {
 		const rollArgs = args[0].split(/[d-]/, 2);
 		let amount = rollArgs[0]; const type = rollArgs[1];
 		// if (args[0] === undefined) {return message.send(`${message.author.username}: What amount/type of dice?.\n(Format: [amount][diceType])\nExample: \`${prefix}roll 2d8\``);}
+		if (amount.includes('.') || type.includes('.')) {return message.channel.send(`${message.author.username}: Decimal values for dice rolling are not possible in this reality.`);}
 		if (args[0].slice(0, 1) === 'd') {amount = 1;}
 		if (isNaN(amount)) {return message.channel.send(`${message.author.username}: Invalid amount.\nExample: \`${prefix}roll 2d8\``); }
 		if (isNaN(type)) {return message.channel.send(`${message.author.username}: Invalid type.\n\`Example types: d2,d4,d7,d10\nExample: \`${prefix}roll 2d8\``);}

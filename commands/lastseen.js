@@ -21,6 +21,7 @@ module.exports = {
 	name: 'lastseen',
 	description: 'Fetches when a user was last seen, according to logs. Note: The time may not be accurate, as all information is from when it was last updated from a guild. If a user leaves all guilds the bot is on, they are no longer visible to it.',
 	usage: '<username/id>',
+	aliases: ['status'],
 	args: true,
 	execute(message, args, a, b, presenceDB) {
 		argCheck(args);
@@ -73,6 +74,8 @@ module.exports = {
 		}
 
 		function sendInfo(user) {
+			let customstatus;
+			if (user.activities[0] != undefined) {if (user.activities[0].state != undefined) {customstatus = user.activities[0].state;}}
 			let time = moment(user.time).format('MMMM Do YYYY, h:mm:ss'); time += ` ${timezone}`;
 			let days = 0; let hours = 0; let minutes = 0;
 			let timeAgo = '';
@@ -94,8 +97,9 @@ module.exports = {
 			case 'offline': status += 'as offline'; break;
 			}
 			status += ` about ${timeAgo} ago (${time}) on ${user.server}.`;
+			if (customstatus != undefined) {status += ` Their status is/was '${customstatus}'`;}
 			if (isNaN(args[0])) {status += ` (ID: \`${user._id}\`)`;}
-			message.channel.send(status);
+			return message.channel.send(status);
 		}
 	},
 };

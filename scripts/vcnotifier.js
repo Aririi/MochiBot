@@ -16,7 +16,11 @@ module.exports = {
 		let time = moment(Date.now()).format('LLLL'); time += ` (${timezone})`;
 		const presentMembers = [];
 		if (!state.channel) {presentMembers.push('one-member');}
-		else {state.channel.members.forEach(member => presentMembers.push(member.user.id));}
+		else {
+			state.channel.members.forEach(member => {
+				if (!member.bot) {presentMembers.push(member.user.id);}
+			});
+		}
 		notifDB.find({ vc: state.channelID }, function(err, docs) {
 			if (err) {return console.log(err);}
 			if (docs[0] === undefined) {return;}
@@ -32,7 +36,6 @@ module.exports = {
 				}
 			});
 		}
-
 
 
 		/* future functionality

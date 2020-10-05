@@ -20,61 +20,61 @@ module.exports = {
 				.setImage(result)
 				.setTimestamp()
 				.setFooter(`Requested by ${message.author.username}`, `${message.author.displayAvatarURL({ dynamic:true })}?size=32`);
-			message.channel.send(randomMediaEmbed);
+			return message.channel.send(randomMediaEmbed);
 		}
 
-		let match = false; let description = 'Here\'s a ';
+		let match = false;
 		// async functions to be executed based on the argument given
 		async function randomAvatar() {
-			description += 'random avatar.';
+			const description = 'Here\'s a random avatar.';
 			await sfw.avatar().then(result => sendEmbed(description, result.url));
 		}
 		async function randomCat() {
-			description += 'random cat image/GIF.';
+			const description = 'Here\'s a random cat image/GIF.';
 			await sfw.meow().then(result => sendEmbed(description, result.url));
 		}
 		async function randomDog() {
-			description += 'random dog image/GIF.';
+			const description = 'Here\'s a random dog image/GIF.';
 			await sfw.woof().then(result => sendEmbed(description, result.url));
 		}
 		async function randomFoxgirl() {
-			description += 'random foxgirl image.';
+			const description = 'Here\'s a random foxgirl image.';
 			await sfw.foxGirl().then(result => sendEmbed(description, result.url));
 		}
 		async function randomGoose() {
-			description += 'random goose image.';
+			const description = 'Here\'s a random goose image.';
 			await sfw.goose().then(result => sendEmbed(description, result.url));
 		}
 		async function randomGECG() {
-			description += 'random GECG (Genetically Engineered CatGirl) image.';
+			const description = 'Here\'s a random GECG (Genetically Engineered CatGirl) image.';
 			await sfw.gecg().then(result => sendEmbed(description, result.url));
 		}
 		async function randomHolo() {
-			description += 'random foxgirl image.';
+			const description = 'Here\'s a random foxgirl image.';
 			await sfw.holo().then(result => sendEmbed(description, result.url));
 		}
 		async function randomKemonomimi() {
-			description += 'random kemonomimi image.';
+			const description = 'Here\'s a random kemonomimi image.';
 			await sfw.kemonomimi().then(result => sendEmbed(description, result.url));
 		}
 		async function randomLizard() {
-			description += 'random lizard image.';
+			const description = 'Here\'s a random lizard image.';
 			await sfw.lizard().then(result => sendEmbed(description, result.url));
 		}
 		async function randomNeko() {
-			description += 'random neko image.';
+			const description = 'Here\'s a random neko image.';
 			await sfw.neko().then(result => sendEmbed(description, result.url));
 		}
 		async function randomNekoGIF() {
-			description += 'random neko GIF.';
+			const description = 'Here\'s a random neko GIF.';
 			await sfw.nekoGif().then(result => sendEmbed(description, result.url));
 		}
 		async function randomWaifu() {
-			description += 'random waifu image.';
+			const description = 'Here\'s a random waifu image.';
 			await sfw.waifu().then(result => sendEmbed(description, result.url));
 		}
 		async function randomWallpaper() {
-			description += 'random wallpaper.';
+			const description = 'Here\'s a random wallpaper.';
 			await sfw.wallpaper().then(result => sendEmbed(description, result.url));
 		}
 		async function randomFact() {
@@ -88,7 +88,7 @@ module.exports = {
 			else {
 				let loopCount = args[1];
 				while (loopCount > 0) {
-					setTimeout(randomTypeCheck, 2000); loopCount = loopCount - 1;
+					setTimeout(randomTypeCheck, 2000); loopCount--;
 				}
 			}
 		}
@@ -96,21 +96,21 @@ module.exports = {
 
 		function randomTypeCheck() {
 			// logical checks for what arg was passed, executing async funcs accordingly
-			if (args[0] === 'avatar' || args[0] === 'icon' || args[0] === 'pfp') {return randomAvatar();}
-			else if (args[0] === 'cat' || args[0] === 'meow') {return randomCat();}
-			else if (args[0] === 'dog' || args[0] === 'woof') {return randomDog();}
-			else if (args[0] === 'goose' || args[0] === 'geese') {return randomGoose();}
-			else if (args[0] === 'foxgirl') {return randomFoxgirl();}
-			else if (args[0] === 'gecg' || args[0] === 'gmo') {return randomGECG();}
-			else if (args[0] === 'holo') {return randomHolo();}
-			else if (args[0] === 'kemonomimi') {return randomKemonomimi();}
-			else if (args[0] === 'lizard') {return randomLizard();}
-			else if (args[0] === 'neko' || args[0] === 'nyan' || args[0] === 'catgirl') {return randomNeko();}
-			else if (args[0] === 'nekogif' || args[0] === 'nyangif' || args[0] === 'catgirlgif') {return randomNekoGIF();}
-			else if (args[0] === 'waifu') {return randomWaifu();}
-			else if (args[0] === 'wallpaper') {return randomWallpaper();}
-			else if (args[0] === 'fact') {return randomFact();}
-			else if (!match) {message.channel.send(`I don't know how to get "${args[0]}," maybe recommend it to the developer?`); return match = true;}
+			if (args[0] === 'avatar' || args[0] === 'icon' || args[0] === 'pfp') {randomAvatar();}
+			else if (args[0] === 'cat' || args[0] === 'meow') {randomCat();}
+			else if (args[0] === 'dog' || args[0] === 'woof') {randomDog();}
+			else if (args[0] === 'goose' || args[0] === 'geese') {randomGoose();}
+			else if (args[0] === 'foxgirl') {randomFoxgirl();}
+			else if (args[0] === 'gecg' || args[0] === 'gmo') {randomGECG();}
+			else if (args[0] === 'holo') {randomHolo();}
+			else if (args[0] === 'kemonomimi') {randomKemonomimi();}
+			else if (args[0] === 'lizard') {randomLizard();}
+			else if (args[0] === 'neko' || args[0] === 'nyan' || args[0] === 'catgirl') {randomNeko();}
+			else if (args[0] === 'nekogif' || args[0] === 'nyangif' || args[0] === 'catgirlgif') {randomNekoGIF();}
+			else if (args[0] === 'waifu') {randomWaifu();}
+			else if (args[0] === 'wallpaper') {randomWallpaper();}
+			else if (args[0] === 'fact') {randomFact();}
+			else if (!match) {message.channel.send(`I don't know how to get "${args[0]}," maybe recommend it to the developer?`); match = true;}
 		}
 	},
 };

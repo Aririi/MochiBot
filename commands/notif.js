@@ -3,9 +3,10 @@ const { prefix } = require('../config.json');
 module.exports = {
 	name: 'notif',
 	description: 'Sets notifications for the author based on voice channel activity, or a keyword. (WIP)',
-	aliases: ['notifyme', 'notifywhen'],
+	aliases: ['notfy', 'notifyme', 'notifywhen'],
 	guildOnly: true,
-	usage: '<vc/word> <count (if for vc)> <name or word (case sensitive)>',
+	usage: '<vc/word> <count (for vc)> <name or word (case sensitive)>',
+	args: true,
 	execute(message, args, a, b, c, notifDB) {
 		if (args[0] === 'vc') {checkValidVC();}
 		else {return message.channel.send(`${message.author.username}: Could not determine what type of notification you want, currently \`vc\` (voice channel) is supported.`);}
